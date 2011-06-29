@@ -1,0 +1,21 @@
+class Person
+!!!148738.java!!!	Person(in firstName : String, in lastName : String)
+		if ((firstName == null) || (lastName == null))
+			throw new NullPointerException();
+		this.firstName = firstName;
+		this.lastName = lastName;
+!!!148866.java!!!	Person(inout p : Person)
+		this.firstName = p.firstName;
+		this.lastName = p.lastName;	
+!!!148994.java!!!	hashCode() : int
+		return firstName.hashCode() + lastName.hashCode();
+!!!149122.java!!!	equals(inout o : Object) : boolean
+		if ( ! (o instanceof Person) )
+			return false;
+		Person p = (Person) o;
+		return (p.firstName.equals(this.firstName)) && (p.lastName.equals(this.lastName));
+!!!149250.java!!!	compareTo(inout p : Person) : int
+		int lastNameCompare = this.lastName.compareTo(p.lastName);
+		return lastNameCompare == 0 ? this.firstName.compareTo(p.firstName) : lastNameCompare;
+!!!149378.java!!!	toString() : String
+		return lastName + " " + firstName;

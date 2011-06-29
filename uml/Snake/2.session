@@ -1,0 +1,22 @@
+window_sizes 1280 773 283 991 518 175
+windows_style
+diagrams
+  active  classdiagram_ref 134530 // Class D
+    991 518 100 4 0 0
+end
+show_stereotypes
+marked
+  class_ref 128002 // Snake
+  class_ref 134530 // SnakeBody
+  class_ref 134658 // Controlable
+  class_ref 134786 // MovementVector
+  classdiagram_ref 134530 // Class D
+end
+selected 
+  package_ref 128002 // person
+open
+  class_ref 128002 // Snake
+  class_ref 134786 // MovementVector
+end
+end
+verbose

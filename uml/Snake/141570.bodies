@@ -1,0 +1,23 @@
+class TestPerson
+!!!149506.java!!!	main(inout args : String) : void
+		// Person man1 = new Person(args[0], args[1]);
+		// Person man2 = new Person(args[2], args[3]);
+		// Person[] personArray = {man1, man2};
+		// List<Person> personList = Arrays.asList(personArray);
+		List<Person> personList = new ArrayList();
+		for (int i = 0; i < args.length; i+=2) {
+			if (i < args.length - 1)
+				personList.add(new Person(args[i], args[i+1]));
+			else 
+				personList.add(new Person(args[i], ""));
+		}	
+		Collections.sort(personList);
+		System.out.println(personList);
+		// System.out.println(man1.hashCode());
+		// System.out.println(man2.hashCode());
+		// System.out.println(man2.equals(man1));
+		Collections.sort(personList, Person.REVERSE_ORDER);
+		System.out.println(personList);
+		Person man1 = personList.get(0),
+			   man2 = new Person(personList.get(1));
+		System.out.println(personList.get(0));
