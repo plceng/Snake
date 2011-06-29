@@ -1,6 +1,6 @@
 format 76
 "Snake"
-  revision 9
+  revision 10
   modified_by 2 "link"
   cpp_root_dir "d:/DEVELOPS/New Folder 1/"
   java_root_dir "d:/DEVELOPS/New Folder 1/"
@@ -40,9 +40,12 @@ format 76
 
   mark_for_import
   
+  java_package "dev.link"
   package_ref 128258 // snakep
 
   package_ref 128002 // person
 
   package_ref 128130 // unknown
+
+  package_ref 134786 // src
 end

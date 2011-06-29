@@ -1,22 +1,25 @@
-window_sizes 1280 773 283 991 518 175
+window_sizes 1280 773 283 991 625 68
 windows_style
 diagrams
-  active  classdiagram_ref 134530 // Class D
-    991 518 100 4 0 0
+  active  classdiagram_ref 141058 // SnakeDiagram
+    991 625 100 4 0 0
 end
 show_stereotypes
 marked
-  class_ref 128002 // Snake
-  class_ref 134530 // SnakeBody
-  class_ref 134658 // Controlable
-  class_ref 134786 // MovementVector
-  classdiagram_ref 134530 // Class D
+  class_ref 148098 // BodyBlock
+  class_ref 148226 // Controlable
+  class_ref 148354 // MovementDirection
+  class_ref 148482 // MovementVector
+  class_ref 148610 // Snake
+  class_ref 148738 // SnakeBody
+  class_ref 148866 // TestSnakeBody
 end
-selected 
-  package_ref 128002 // person
+selected class_ref 148354 // MovementDirection
 open
-  class_ref 128002 // Snake
-  class_ref 134786 // MovementVector
+  
+  package_ref 128258 // snakep
+  classview_ref 141442 // src
+  deploymentview_ref 128002 // src
 end
 end
 verbose

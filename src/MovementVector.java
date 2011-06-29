@@ -1,6 +1,6 @@
 package dev.link.snake;
 
-public enum MovementDirection { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN }
+enum MovementDirection { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN }
 
 public class MovementVector {
 
@@ -12,11 +12,16 @@ public class MovementVector {
 	private int velocity;
 	private MovementDirection direction;
 	
-	public MovementVector(){}
+	public MovementVector() {
+		this.velocity = 2;
+		this.direction = MovementDirection.DIR_RIGHT;
+	}
 	
-	public int getVelocity(){ return velocity; }
-	public int getDirection(){ return direction; }
+	public int getVelocity() { return velocity; }
+	public MovementDirection getDirection() { return direction; }
 
-	public void setVelocity(int velocity){}
-	public void setDirection(MovementDirection direction){}
+	public void setVelocity(int velocity) {}
+	public void setDirection(MovementDirection direction) { this.direction = direction; }
+	
+	public String toString() { return "Direction = " + direction + "   Velocity = " + velocity; }
 }
