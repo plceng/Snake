@@ -1,0 +1,41 @@
+<project name="Snake The Game" default="all">
+
+	<target name="all" description="Default Target" depends="build.jar">
+		<echo>Build complete</echo>
+	</target>
+
+	<target name="make.dir" description="Creating directories">
+		<mkdir dir="build"/>
+		<mkdir dir="build/classes"/>
+		<mkdir dir="debug"/>
+		<mkdir dir="debug/classes"/>	
+	</target>
+	
+	<target name="compile" description="Compiling" depends="make.dir">
+		<javac destdir="build/classes">
+			<src path = "src"/>
+		</javac>
+	</target>
+	
+	<target name="debug" description="Compiling for debug" depends="make.dir">
+		<javac destdir="debug/classes">
+			<src path = "src"/>
+		</javac>
+	</target>
+	
+	<target name="clean" description="Cleaning up">
+		<delete dir="build"/>
+		<delete dir="debug"/>
+	</target>
+	
+	<target name="build.jar" description="Building jar" depends="compile">
+		<jar destfile="build/Snake-The-Game.jar">
+			<fileset dir="build/classes"/>
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="dev.link.snake.SnakeTheGame"/>
+			</manifest>
+		</jar>
+	</target>
+	
+</project>

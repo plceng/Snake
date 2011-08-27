@@ -18,7 +18,7 @@ public class BodyBlock {
 	}
 	
 	public int hashCode() {
-		return coordX*coordY;
+		return 7*coordX*coordY;
 	}
 	
 	public boolean equals(Object obj) {

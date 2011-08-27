@@ -24,4 +24,24 @@ public class MovementVector {
 	public void setDirection(MovementDirection direction) { this.direction = direction; }
 	
 	public String toString() { return "Direction = " + direction + "   Velocity = " + velocity; }
+	
+	public int hashCode() {
+		return 13*velocity*direction.hashCode();
+	}
+	
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MovementVector))
+			return false;
+		MovementVector other = (MovementVector) obj;
+		return ((this.velocity == other.velocity)
+				&& this.direction.equals(other.direction)) 
+			? true : false;
+	}
+	
+	public static void main(String[] args) {
+		MovementVector mv = new MovementVector();
+		System.out.println(mv);
+		MovementDirection md = mv.getDirection();
+		System.out.println(md);
+	}
 }
