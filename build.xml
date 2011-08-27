@@ -33,7 +33,7 @@
 			<fileset dir="build/classes"/>
 			<manifest>
 				<attribute name="Built-By" value="${user.name}"/>
-				<attribute name="Main-Class" value="dev.link.snake.SnakeTheGame"/>
+				<attribute name="Main-Class" value="dev.link.snake.gui.SnakeTheGame"/>
 			</manifest>
 		</jar>
 	</target>

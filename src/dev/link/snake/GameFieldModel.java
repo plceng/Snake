@@ -4,7 +4,8 @@ import java.util.*;
 import java.awt.Dimension;
 
 public class GameFieldModel {
-	private HashSet<SnakeBody> snakes;
+	private HashSet<SnakeBody> snakes;
+
 	private Dimension fieldSize;
 	private static final Dimension DEFAULT_FIELD_SIZE = new Dimension(50,50);
 	
@@ -14,43 +15,98 @@ public class GameFieldModel {
 		snakes.add(new SnakeBody());
 	}
 	
+	public void moveSnakes() {
+		for (SnakeBody snake : snakes)
+			snake.move();
+	}
+	
+// 	Эти методы нужны для независимого управления телами змеек, 
+//	если их несколько. 	
+	public void turnSnakeLeft(int snakeID) {
+		for (SnakeBody snake : snakes)
+			snake.turnLeft();
+	}	
+
+	public void turnSnakeRight(int snakeID) {
+		for (SnakeBody snake : snakes)
+			snake.turnRigth();
+	}	
+
+	public void turnSnakeUp(int snakeID) {
+		for (SnakeBody snake : snakes)
+			snake.turnUp();
+	}
+	
+	public void turnSnakeDown(int snakeID) {
+		for (SnakeBody snake : snakes)
+			snake.turnDown();
+	}
+	
 	public void addSnakeBody(SnakeBody snakeBody) {
 		this.snakes.add(snakeBody);	
 	}
 
-	/**
-	 * Returns the value of snakes.
-	 */
-	public HashSet<SnakeBody> getSnakes() {
-		return snakes;
-	}
-
-	/**
-	 * Returns the value of fieldSize.
-	 */
-	public Dimension getFieldSize() {
-		return fieldSize;
-	}
-
-	public double getFieldWidth() {
-		return fieldSize.getWidth();
-	}
-
-	public double getFieldHeight() {
-		return fieldSize.getHeight();
-	}
-	
-	/**
-	 * Sets the value of fieldSize in int values.
-	 */
+	/**
+
+	 * Returns the value of snakes.
+
+	 */
+
+	public HashSet<SnakeBody> getSnakes() {
+
+		return snakes;
+
+	}
+
+
+
+	/**
+
+	 * Returns the value of fieldSize.
+
+	 */
+
+	public Dimension getFieldSize() {
+
+		return fieldSize;
+
+	}
+
+
+
+	public double getFieldWidth() {
+
+		return fieldSize.getWidth();
+
+	}
+
+
+
+	public double getFieldHeight() {
+
+		return fieldSize.getHeight();
+
+	}
+
+
+	
+	/**
+
+	 * Sets the value of fieldSize in int values.
+
+	 */
+
 	 public void setFieldSize(int width, int height) {
 	 	 this.fieldSize.width = width;
 	 	 this.fieldSize.height = height;
 	 }
 	 
-	/**
-	 * Sets the value of fieldSize in Dimension value.
-	 */
+	/**
+
+	 * Sets the value of fieldSize in Dimension value.
+
+	 */
+
 	 public void setFieldSize(Dimension fieldSize) {
 	 	 this.fieldSize = fieldSize;
 	 }

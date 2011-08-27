@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import java.awt.geom.Ellipse2D;
-
+import javax.swing.Timer;
 import javax.swing.JPanel;
 
 import dev.link.snake.*;
@@ -19,6 +19,8 @@ public class GameFieldPanel extends JPanel {
 	private int drawBlockHeight; // Высота отрисовываемого сегмента поля
 	private static final int DEFAULT_PANEL_SIZE = 600;
 	
+	private Timer timer;
+	
  	public GameFieldPanel() {
 // 		setSize(DEFAULT_PANEL_SIZE, DEFAULT_PANEL_SIZE);
 // 		setBackground(Color.GREEN);
@@ -26,10 +28,14 @@ public class GameFieldPanel extends JPanel {
  	
 	public GameFieldPanel(GameFieldModel fieldModel) {
 		new GameFieldPanel();
+		setFocusable(true);
+		timer = new Timer(200, new TimerListener());
  		setBackground(Color.GREEN);
 		this.fieldModel = fieldModel;
 //		System.out.println("getSize(): " + getSize());
 //		System.out.println("fieldModel.getFieldWidth(): " + fieldModel.getFieldWidth());
+		addKeyListener(new KeyHandler());
+		timer.start();
 	}
 	
 	private void calculateDrawBlocks() {
@@ -68,7 +74,6 @@ public class GameFieldPanel extends JPanel {
 //			System.out.println("bb.getCoordX(): " + bb.getCoordX());
 //			System.out.println("drawBlockWidth: " + drawBlockWidth);
 		}
-		graph2D.fill(new Ellipse2D.Double(200, 200, 50, 50));
 	}
 /* 	public static Dimension ScaleDimension(Dimension dim, int scaleValue) {
 		return new Dimension(dim.width * scaleValue, dim.height * scaleValue);
@@ -78,6 +83,26 @@ public class GameFieldPanel extends JPanel {
 		
 	}
 	
-//	public static 
+	private class TimerListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			fieldModel.moveSnakes(); // Не менять. Должен двигать все змейки
+			repaint();
+		}
+	}
 
+	private class KeyHandler extends KeyAdapter {
+		public void keyPressed(KeyEvent keyEvent) {
+			int keyCode = keyEvent.getKeyCode();
+			// Обработка нажатой клавиши
+			if (keyCode == KeyEvent.VK_LEFT)
+				fieldModel.turnSnakeLeft(1);
+			else if (keyCode == KeyEvent.VK_RIGHT)
+				fieldModel.turnSnakeRight(1);
+			else if (keyCode == KeyEvent.VK_UP)
+				fieldModel.turnSnakeUp(1);
+			else if (keyCode == KeyEvent.VK_DOWN)
+				fieldModel.turnSnakeDown(1);
+			System.out.println("Key Pressed: " + keyCode);
+		}
+	}
 }
