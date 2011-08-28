@@ -5,7 +5,8 @@ import java.util.*;
 public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
-	private MovementVector moveVector;
+
+	private MovementVector moveVector;
 
 	public SnakeBody() {
 		moveVector = new MovementVector();
@@ -17,7 +18,7 @@ public class SnakeBody  implements Controlable {
 	}
 	
 	public int hashCode() {
-		return 11*body.hashCode()*moveVector.hashCode();
+		return 11 * body.hashCode() * moveVector.hashCode();
 	}
 	
 	public boolean equals(Object obj) {
@@ -29,14 +30,18 @@ public class SnakeBody  implements Controlable {
 			? true : false;
 	}
 	
-	/**
-	 * Returns the value of body.
-	 */
-	public ArrayList<BodyBlock> getBody() { return this.body; }
-
-	/**
-	 * Returns the value of moveVector.
-	 */
+	/**
+
+	 * Returns the value of body.
+
+	 */
+
+	public ArrayList<BodyBlock> getBody() { return this.body; }
+
+	/**
+	 * Returns the value of moveVector.
+	 */
+
 	public MovementVector getMoveVector() { return this.moveVector; }
 	
 	public void turnLeft() {

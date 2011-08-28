@@ -75,17 +75,23 @@ public class GameFieldPanel extends JPanel {
 //			System.out.println("drawBlockWidth: " + drawBlockWidth);
 		}
 	}
-/* 	public static Dimension ScaleDimension(Dimension dim, int scaleValue) {
-		return new Dimension(dim.width * scaleValue, dim.height * scaleValue);
-	}
- */	
+
 	private void drawRabbit(Graphics2D graph2D) {
-		
+		Dimension fieldSize = fieldModel.getFieldSize();
+		graph2D.setColor(Color.YELLOW);
+		Rabbit rabbit = fieldModel.getRabbit();
+		BodyBlock bb = rabbit.getBody();
+		Shape drawBlock = new Ellipse2D.Double(bb.getCoordX() * drawBlockWidth,
+										 bb.getCoordY() * drawBlockHeight,
+										 drawBlockWidth,
+										 drawBlockHeight);
+		graph2D.fill(drawBlock);
 	}
 	
 	private class TimerListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			fieldModel.moveSnakes(); // Не менять. Должен двигать все змейки
+			fieldModel.moveRabbit();
 			repaint();
 		}
 	}

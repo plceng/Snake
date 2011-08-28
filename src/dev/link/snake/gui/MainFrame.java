@@ -17,7 +17,6 @@ class MainFrame extends JFrame {
 		setTitle("Беся + Бодя = Балбесы :)");
 		GameFieldPanel fieldPanel = new GameFieldPanel(fieldModel);
 		add(fieldPanel);
-		System.out.println(fieldPanel.getSize());
 	}
 }
 
