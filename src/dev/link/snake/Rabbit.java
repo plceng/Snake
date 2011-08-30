@@ -11,6 +11,11 @@ public class Rabbit implements Controlable {
 		body = new BodyBlock(x, y);
 		moveVector = new MovementVector();
 	}
+
+	public Rabbit(Rabbit other) {
+		this.body = other.body;
+		this.moveVector = other.moveVector;
+	}
 	
 	public int hashCode() {
 		return 17 * body.hashCode() * moveVector.hashCode();
@@ -70,7 +75,7 @@ public class Rabbit implements Controlable {
 			
 			case DIR_DOWN: nextRabbitBoody.incrCoordY(); break;
 		}
-		body = new BodyBlock(nextRabbitBoody); // “ело кролика состоит из нового расчитанный блок
+		body = new BodyBlock(nextRabbitBoody); // “ело кролика состоит из нового расчитанного блок
 	}
 	
 	public static void main(String[] args) {

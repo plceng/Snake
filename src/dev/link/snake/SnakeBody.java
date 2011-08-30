@@ -5,7 +5,8 @@ import java.util.*;
 public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
-
+	private boolean valid = true;
+	
 	private MovementVector moveVector;
 
 	public SnakeBody() {
@@ -72,7 +73,14 @@ public class SnakeBody  implements Controlable {
 			
 			case DIR_DOWN: newFirstBlock.incrCoordY(); break;
 		}
-		body.add(0, newFirstBlock);
+		// Проверка корректности
+		if (body.contains(newFirstBlock)) {
+			setValid(false);
+			//TODO Сделать вывод имени игрока
+			System.out.println("Game over for player [PLAYER_NAME]");
+		}
+		else 
+			body.add(0, newFirstBlock);
 	}
 
 	public void move() {
@@ -80,7 +88,8 @@ public class SnakeBody  implements Controlable {
 		grow();
 	}
 
-	public boolean isValid() { return true; }
+	public boolean isValid() { return this.valid; }
+	public void setValid(boolean valid) { this.valid = valid; }
 	
 	public String toString() {
 		return "Shake's body: " + body.toString() 

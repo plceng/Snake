@@ -19,7 +19,8 @@ public class GameFieldPanel extends JPanel {
 	private int drawBlockHeight; // Высота отрисовываемого сегмента поля
 	private static final int DEFAULT_PANEL_SIZE = 600;
 	
-	private Timer timer;
+	private Timer snakesTimer;
+	private Timer rabbitTimer;
 	
  	public GameFieldPanel() {
 // 		setSize(DEFAULT_PANEL_SIZE, DEFAULT_PANEL_SIZE);
@@ -29,13 +30,17 @@ public class GameFieldPanel extends JPanel {
 	public GameFieldPanel(GameFieldModel fieldModel) {
 		new GameFieldPanel();
 		setFocusable(true);
-		timer = new Timer(200, new TimerListener());
  		setBackground(Color.GREEN);
 		this.fieldModel = fieldModel;
 //		System.out.println("getSize(): " + getSize());
 //		System.out.println("fieldModel.getFieldWidth(): " + fieldModel.getFieldWidth());
 		addKeyListener(new KeyHandler());
-		timer.start();
+		//Таймер змеек
+		snakesTimer = new Timer(100, new SnakeTimerListener());
+		snakesTimer.start();
+		//Таймер кролика
+		rabbitTimer = new Timer(300, new RabbitTimerListener());
+		rabbitTimer.start();
 	}
 	
 	private void calculateDrawBlocks() {
@@ -88,14 +93,20 @@ public class GameFieldPanel extends JPanel {
 		graph2D.fill(drawBlock);
 	}
 	
-	private class TimerListener implements ActionListener {
+	private class SnakeTimerListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			fieldModel.moveSnakes(); // Не менять. Должен двигать все змейки
-			fieldModel.moveRabbit();
 			repaint();
 		}
 	}
 
+	private class RabbitTimerListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			fieldModel.moveRabbit();
+			repaint();
+		}
+	}
+	
 	private class KeyHandler extends KeyAdapter {
 		public void keyPressed(KeyEvent keyEvent) {
 			int keyCode = keyEvent.getKeyCode();
@@ -108,7 +119,6 @@ public class GameFieldPanel extends JPanel {
 				fieldModel.turnSnakeUp(1);
 			else if (keyCode == KeyEvent.VK_DOWN)
 				fieldModel.turnSnakeDown(1);
-			System.out.println("Key Pressed: " + keyCode);
 		}
 	}
 }
