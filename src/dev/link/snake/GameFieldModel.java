@@ -7,7 +7,7 @@ public class GameFieldModel {
 	private HashSet<SnakeBody> snakes;
 	private Rabbit rabbit;
 	private Dimension fieldSize;
-	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(50,50);
+	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25,25);
 	private boolean rabbitIsAlive = true;
 	
 	Random rand = new Random();
@@ -70,7 +70,7 @@ public class GameFieldModel {
 		return result;
 		
 	}
-	
+//-------------	
 // 	Эти методы нужны для независимого управления телами змеек, 
 //	если их несколько. 	
 	public void turnSnakeLeft(int snakeID) {
@@ -92,7 +92,8 @@ public class GameFieldModel {
 		for (SnakeBody snake : snakes)
 			snake.turnDown();
 	}
-	
+//------------
+
 	public void addSnakeBody(SnakeBody snakeBody) {
 		this.snakes.add(snakeBody);	
 	}

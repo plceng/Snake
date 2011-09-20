@@ -17,30 +17,35 @@ public class GameFieldPanel extends JPanel {
 	private GameFieldModel fieldModel;
 	private int drawBlockWidth; // Ширина отрисовываемого сегмента поля
 	private int drawBlockHeight; // Высота отрисовываемого сегмента поля
-	private static final int DEFAULT_PANEL_SIZE = 600;
+	private static final int DEFAULT_PANEL_SIZE = 750;
 	
 	private Timer snakesTimer;
 	private Timer rabbitTimer;
 	
  	public GameFieldPanel() {
-// 		setSize(DEFAULT_PANEL_SIZE, DEFAULT_PANEL_SIZE);
-// 		setBackground(Color.GREEN);
+		setFocusable(true);
+ 		setBackground(Color.GREEN);
+		addKeyListener(new KeyHandler());
 	}
  	
 	public GameFieldPanel(GameFieldModel fieldModel) {
 		new GameFieldPanel();
-		setFocusable(true);
- 		setBackground(Color.GREEN);
+		setFieldModel(fieldModel);
+	}
+	
+	public final void setFieldModel(GameFieldModel fieldModel) {
 		this.fieldModel = fieldModel;
-//		System.out.println("getSize(): " + getSize());
-//		System.out.println("fieldModel.getFieldWidth(): " + fieldModel.getFieldWidth());
-		addKeyListener(new KeyHandler());
 		//Таймер змеек
+		if (snakesTimer != null)
+			snakesTimer.stop();
 		snakesTimer = new Timer(100, new SnakeTimerListener());
 		snakesTimer.start();
 		//Таймер кролика
+		if (rabbitTimer != null)
+			rabbitTimer.stop();
 		rabbitTimer = new Timer(300, new RabbitTimerListener());
 		rabbitTimer.start();
+		requestFocus();
 	}
 	
 	private void calculateDrawBlocks() {

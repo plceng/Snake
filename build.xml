@@ -37,5 +37,9 @@
 			</manifest>
 		</jar>
 	</target>
+
+	<target name="run" depends="build.jar">
+		<java jar="build/Snake-The-Game.jar" fork="true"/>
+	</target>
 	
 </project>

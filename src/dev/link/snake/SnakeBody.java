@@ -6,7 +6,8 @@ public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
 	private boolean valid = true;
-	
+	private String name = "default_name";
+	private int snakeID = 1;
 	private MovementVector moveVector;
 
 	public SnakeBody() {
@@ -17,9 +18,18 @@ public class SnakeBody  implements Controlable {
 		body.add(0, new BodyBlock(12,10));
 		body.add(0, new BodyBlock(13,10));
 	}
+
+	public SnakeBody(int initX, int initY) {
+		moveVector = new MovementVector();
+		body = new ArrayList<BodyBlock>();
+		for (int i = 0; i < 5; i++) {
+			body.add(0, new BodyBlock(initX + i,initY));
+		}
+	}
+
 	
 	public int hashCode() {
-		return 11 * body.hashCode() * moveVector.hashCode();
+		return 11 * body.hashCode() * moveVector.hashCode() * snakeID;
 	}
 	
 	public boolean equals(Object obj) {
@@ -31,19 +41,46 @@ public class SnakeBody  implements Controlable {
 			? true : false;
 	}
 	
+	/**
+	 * Returns the value of snakeID.
+	 */
+	public int getSnakeID() {
+		return snakeID;
+	}
+
+	/**
+	 * Sets the value of snakeID.
+	 * @param snakeID The value to assign snakeID.
+	 */
+	public void setSnakeID(int snakeID) {
+		this.snakeID = snakeID;
+	}
+	
+	
 	/**
-
 	 * Returns the value of body.
-
 	 */
-
 	public ArrayList<BodyBlock> getBody() { return this.body; }
 
 	/**
 	 * Returns the value of moveVector.
 	 */
-
 	public MovementVector getMoveVector() { return this.moveVector; }
+	/**
+	 * Returns the value of name.
+	 */
+	 
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Sets the value of name.
+	 * @param name The value to assign name.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	public void turnLeft() {
 		moveVector.setDirection(MovementDirection.DIR_LEFT);
@@ -76,8 +113,7 @@ public class SnakeBody  implements Controlable {
 		// Проверка корректности
 		if (body.contains(newFirstBlock)) {
 			setValid(false);
-			//TODO Сделать вывод имени игрока
-			System.out.println("Game over for player [PLAYER_NAME]");
+			System.out.println("Game over for player " + this.name);
 		}
 		else 
 			body.add(0, newFirstBlock);

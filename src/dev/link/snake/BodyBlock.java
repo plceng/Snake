@@ -43,25 +43,25 @@ public class BodyBlock {
 	public void setCoordY(int coordY) { this.coordX = coordY; }
 
 	public void incrCoordX() { 
-		if (this.coordX + 1 >= COORD_LIMITS.width)
+		if (this.coordX > COORD_LIMITS.width)
 			this.coordX = 0; 
 		else
 			this.coordX++;
 	}
 	public void decrCoordX() {
-		if (this.coordX - 1 <= 0)
+		if (this.coordX < 0)
 			this.coordX = COORD_LIMITS.width; 
 		else
 			this.coordX--; 
 	}
 	public void incrCoordY() { 		
-		if (this.coordY + 1 >= COORD_LIMITS.height)
+		if (this.coordY > COORD_LIMITS.height)
 			this.coordY = 0; 
 		else
 			this.coordY++;
  }
 	public void decrCoordY() { 		
-		if (this.coordY - 1 <= 0)
+		if (this.coordY < 0)
 			this.coordY = COORD_LIMITS.height; 
 		else
 			this.coordY--; 
