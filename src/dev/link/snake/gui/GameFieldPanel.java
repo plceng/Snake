@@ -9,7 +9,6 @@ import javax.swing.Timer;
 import javax.swing.JPanel;
 
 import dev.link.snake.*;
-
 /**
 * Представление игрового поля
 */
@@ -25,7 +24,13 @@ public class GameFieldPanel extends JPanel {
  	public GameFieldPanel() {
 		setFocusable(true);
  		setBackground(Color.GREEN);
-		addKeyListener(new KeyHandler());
+		KeyHandler firstPlayerKeyHandler = new KeyHandler(KeyEvent.VK_LEFT,
+				KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN, GameParameters.FIRST_PLAYER_NAME);
+		addKeyListener(firstPlayerKeyHandler);
+		KeyHandler secondPlayerKeyHandler = new KeyHandler(KeyEvent.VK_A,
+				KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S, GameParameters.SECOND_PLAYER_NAME);
+		addKeyListener(secondPlayerKeyHandler);
+
 	}
  	
 	public GameFieldPanel(GameFieldModel fieldModel) {
@@ -58,16 +63,16 @@ public class GameFieldPanel extends JPanel {
 		super.paintComponent(graph);
 //		System.out.println("Hello from: paintComponent(Graphics graph)");
 		Graphics2D graph2D = (Graphics2D) graph;
-		graph2D.setColor(Color.RED);
 		drawAllSnakes(graph2D);
 		drawRabbit(graph2D);
 	}
 	
 	private void drawAllSnakes(Graphics2D graph2D) {
 //		System.out.println("Hello from: drawAllSnakes(Graphics2D graph2D)");
-		Set<SnakeBody> snakesSet = fieldModel.getSnakes();
-		for (SnakeBody snake : snakesSet) 
+		Collection<SnakeBody> snakesSet = fieldModel.getAllSnakes();
+		for (SnakeBody snake : snakesSet) {
 			drawOneSnake(snake, graph2D);
+		}
 	}
 	
 	private void drawOneSnake(SnakeBody snake, Graphics2D graph2D) {
@@ -113,17 +118,32 @@ public class GameFieldPanel extends JPanel {
 	}
 	
 	private class KeyHandler extends KeyAdapter {
+		private int turnLeftKey;
+		private int turnRightKey;
+		private int turnUpKey;
+		private int turnDownKey;
+		private String playerName;
+
+		public KeyHandler(int turnLeftKey, int turnRightKey, int turnUpKey,
+				int turnDownKey, String playerName) {
+			this.turnLeftKey = turnLeftKey;
+			this.turnRightKey = turnRightKey;
+			this.turnUpKey = turnUpKey;
+			this.turnDownKey = turnDownKey;
+			this.playerName = playerName;
+		}
+
 		public void keyPressed(KeyEvent keyEvent) {
 			int keyCode = keyEvent.getKeyCode();
 			// Обработка нажатой клавиши
-			if (keyCode == KeyEvent.VK_LEFT)
-				fieldModel.turnSnakeLeft(1);
-			else if (keyCode == KeyEvent.VK_RIGHT)
-				fieldModel.turnSnakeRight(1);
-			else if (keyCode == KeyEvent.VK_UP)
-				fieldModel.turnSnakeUp(1);
-			else if (keyCode == KeyEvent.VK_DOWN)
-				fieldModel.turnSnakeDown(1);
+			if (keyCode == turnLeftKey)
+				fieldModel.turnSnakeLeft(playerName);
+			else if (keyCode == turnRightKey)
+				fieldModel.turnSnakeRight(playerName);
+			else if (keyCode == turnUpKey)
+				fieldModel.turnSnakeUp(playerName);
+			else if (keyCode == turnDownKey)
+				fieldModel.turnSnakeDown(playerName);
 		}
 	}
 }

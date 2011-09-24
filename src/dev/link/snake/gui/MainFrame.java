@@ -37,7 +37,7 @@ class MainFrame extends JFrame {
 	
 	private void startNewGame(){
 		fieldModel = new GameFieldModel();
-		fieldModel.addSnakeBody(new SnakeBody());
+		fieldModel.twoPlayerModel();
 		fieldPanel.setFieldModel(fieldModel);
 	}
 	

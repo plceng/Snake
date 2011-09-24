@@ -2,21 +2,32 @@ package dev.link.snake;
 
 import java.util.*;
 import java.awt.Dimension;
+import dev.link.snake.gui.SnakeTheGame;
 
 public class GameFieldModel {
-	private HashSet<SnakeBody> snakes;
+	private Map<String,SnakeBody> snakes;
 	private Rabbit rabbit;
 	private Dimension fieldSize;
 	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25,25);
 	private boolean rabbitIsAlive = true;
 	
-	Random rand = new Random();
+	private Random rand = new Random();
 	
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
-		snakes = new HashSet<SnakeBody>();
-		snakes.add(new SnakeBody());
+		snakes = new HashMap<String,SnakeBody>();
+//		twoPlayerModel();
+//		onePlayerModel();
 		createRabbit();
+	}
+
+	public final void onePlayerModel() {
+		snakes.put("First_player", new SnakeBody());
+	}
+
+	public final void twoPlayerModel() {
+		snakes.put(GameParameters.FIRST_PLAYER_NAME, new SnakeBody(10, 10, GameParameters.FIRST_PLAYER_NAME));
+		snakes.put(GameParameters.SECOND_PLAYER_NAME, new SnakeBody(15, 15, GameParameters.SECOND_PLAYER_NAME));
 	}
 	
 	private void createRabbit() {
@@ -29,7 +40,7 @@ public class GameFieldModel {
 	private void killRabbit() { rabbitIsAlive = false; }
 		
 	public void moveSnakes() {
-		for (SnakeBody snake : snakes) {
+		for (SnakeBody snake : snakes.values()) {
 			// Правило 1: Съеден ли кролик?
 			if (snake.getBody().contains(rabbit.getBody())) {
 				snake.grow();
@@ -62,7 +73,7 @@ public class GameFieldModel {
 		Rabbit futureRabbit = new Rabbit(rabbit);
 		futureRabbit.move();
 		boolean result = false;
-		for (SnakeBody snake : snakes) {
+		for (SnakeBody snake : snakes.values()) {
 			result = result || snake.getBody().contains(futureRabbit.getBody());
 			if (result)
 				return result;
@@ -73,35 +84,27 @@ public class GameFieldModel {
 //-------------	
 // 	Эти методы нужны для независимого управления телами змеек, 
 //	если их несколько. 	
-	public void turnSnakeLeft(int snakeID) {
-		for (SnakeBody snake : snakes)
-			snake.turnLeft();
+	public void turnSnakeLeft(String playerName) {
+			snakes.get(playerName).turnLeft();
 	}	
 
-	public void turnSnakeRight(int snakeID) {
-		for (SnakeBody snake : snakes)
-			snake.turnRigth();
+	public void turnSnakeRight(String playerName) {
+		snakes.get(playerName).turnRigth();
 	}	
 
-	public void turnSnakeUp(int snakeID) {
-		for (SnakeBody snake : snakes)
-			snake.turnUp();
+	public void turnSnakeUp(String playerName) {
+		snakes.get(playerName).turnUp();
 	}
 	
-	public void turnSnakeDown(int snakeID) {
-		for (SnakeBody snake : snakes)
-			snake.turnDown();
+	public void turnSnakeDown(String playerName) {
+		snakes.get(playerName).turnDown();
 	}
 //------------
-
-	public void addSnakeBody(SnakeBody snakeBody) {
-		this.snakes.add(snakeBody);	
-	}
 
 	/**
 	 * Returns the value of snakes.
 	 */
-	public HashSet<SnakeBody> getSnakes() { return snakes; }
+	public Collection<SnakeBody> getAllSnakes() { return snakes.values(); }
 	
 	/**
 	 * Returns the value of rabbit.
@@ -148,4 +151,5 @@ public class GameFieldModel {
 	 	 	 System.out.println(snake);
 	 	 }
 	 }
+
 }

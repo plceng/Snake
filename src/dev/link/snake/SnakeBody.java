@@ -6,8 +6,7 @@ public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
 	private boolean valid = true;
-	private String name
- = "default_name";
+	private String playerName = GameParameters.FIRST_PLAYER_NAME;
 	private int snakeID = 1;
 
 	private MovementVector moveVector;
@@ -21,12 +20,13 @@ public class SnakeBody  implements Controlable {
 		body.add(0, new BodyBlock(13,10));
 	}
 
-	public SnakeBody(int initX, int initY) {
+	public SnakeBody(int initX, int initY, String playerName) {
 		moveVector = new MovementVector();
 		body = new ArrayList<BodyBlock>();
 		for (int i = 0; i < 5; i++) {
 			body.add(0, new BodyBlock(initX + i,initY));
 		}
+		this.playerName = playerName;
 	}
 
 	
@@ -89,29 +89,7 @@ public class SnakeBody  implements Controlable {
 	 */
 
 	 
-	public String getName() {
 
-		return name;
-
-	}
-
-
-
-	/**
-
-	 * Sets the value of name.
-
-	 * @param name The value to assign name.
-
-	 */
-
-	public void setName(String name) {
-
-		this.name = name;
-
-	}
-
-	
 	public void turnLeft() {
 		moveVector.setDirection(MovementDirection.DIR_LEFT);
 	}
@@ -143,7 +121,7 @@ public class SnakeBody  implements Controlable {
 		// Проверка на самосъедание
 		if (body.contains(newFirstBlock)) {
 			setValid(false);
-			System.out.println("Game over for player " + this.name);
+			System.out.println("Game over for player " + this.playerName);
 		}
 		else 
 			body.add(0, newFirstBlock);
