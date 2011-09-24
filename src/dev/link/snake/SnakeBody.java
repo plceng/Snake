@@ -6,8 +6,10 @@ public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
 	private boolean valid = true;
-	private String name = "default_name";
-	private int snakeID = 1;
+	private String name
+ = "default_name";
+	private int snakeID = 1;
+
 	private MovementVector moveVector;
 
 	public SnakeBody() {
@@ -41,20 +43,34 @@ public class SnakeBody  implements Controlable {
 			? true : false;
 	}
 	
-	/**
-	 * Returns the value of snakeID.
-	 */
-	public int getSnakeID() {
-		return snakeID;
-	}
-
-	/**
-	 * Sets the value of snakeID.
-	 * @param snakeID The value to assign snakeID.
-	 */
-	public void setSnakeID(int snakeID) {
-		this.snakeID = snakeID;
-	}
+	/**
+
+	 * Returns the value of snakeID.
+
+	 */
+
+	public int getSnakeID() {
+
+		return snakeID;
+
+	}
+
+
+
+	/**
+
+	 * Sets the value of snakeID.
+
+	 * @param snakeID The value to assign snakeID.
+
+	 */
+
+	public void setSnakeID(int snakeID) {
+
+		this.snakeID = snakeID;
+
+	}
+
 	
 	
 	/**
@@ -66,21 +82,35 @@ public class SnakeBody  implements Controlable {
 	 * Returns the value of moveVector.
 	 */
 	public MovementVector getMoveVector() { return this.moveVector; }
-	/**
-	 * Returns the value of name.
-	 */
+	/**
+
+	 * Returns the value of name.
+
+	 */
+
 	 
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the value of name.
-	 * @param name The value to assign name.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+	public String getName() {
+
+		return name;
+
+	}
+
+
+
+	/**
+
+	 * Sets the value of name.
+
+	 * @param name The value to assign name.
+
+	 */
+
+	public void setName(String name) {
+
+		this.name = name;
+
+	}
+
 	
 	public void turnLeft() {
 		moveVector.setDirection(MovementDirection.DIR_LEFT);
@@ -110,7 +140,7 @@ public class SnakeBody  implements Controlable {
 			
 			case DIR_DOWN: newFirstBlock.incrCoordY(); break;
 		}
-		// Проверка корректности
+		// Проверка на самосъедание
 		if (body.contains(newFirstBlock)) {
 			setValid(false);
 			System.out.println("Game over for player " + this.name);
