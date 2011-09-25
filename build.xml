@@ -17,12 +17,7 @@
 		</javac>
 	</target>
 	
-	<target name="debug" description="Compiling for debug" depends="make.dir">
-		<javac destdir="debug/classes">
-			<src path = "src"/>
-		</javac>
-	</target>
-	
+
 	<target name="clean" description="Cleaning up">
 		<delete dir="build"/>
 		<delete dir="debug"/>

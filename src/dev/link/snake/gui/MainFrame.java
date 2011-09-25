@@ -7,6 +7,7 @@ import java.awt.*;
 import dev.link.snake.*;
 
 class MainFrame extends JFrame {
+
 	private static final int DEFAULT_WIDTH = 640;
 	private static final int DEFAULT_HEIGHT = 480;
 	private ActionListener newGameActionListener;
@@ -14,46 +15,38 @@ class MainFrame extends JFrame {
 	private GameFieldModel fieldModel;
 	private ControlPanel controlPanel;
 
-	
 	public MainFrame() {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setTitle("Беся + Бодя = Балбесы :)");
 
 		newGameActionListener = new ActionListener() {
+
 			public void actionPerformed(ActionEvent event) {
-				startNewGame();	
+				startNewGame();
 			}
 		};
-
 
 		controlPanel = new ControlPanel(newGameActionListener);
 		add(controlPanel, BorderLayout.EAST);
 
-		
 		fieldPanel = new GameFieldPanel();
 		startNewGame();
 		add(fieldPanel);
 	}
-	
-	private void startNewGame(){
+
+	private void startNewGame() {
+		GameParameters.init(); // сбрасывает игроков, однако!
 		fieldModel = new GameFieldModel();
-		fieldModel.twoPlayerModel();
+		fieldModel.addPlayersAndSnakes(GameParameters.NUMBER_OF_PLAYERS);
+		fieldPanel.initHandlers();
 		fieldPanel.setFieldModel(fieldModel);
-	}
-	
-/*	private class NewGameActionListener implements ActionListener {
-		public void actionPerformed() {
-			startNewGame();	
-		}
 
 	}
-*/	
-	
-	
+	/*	private class NewGameActionListener implements ActionListener {
+	public void actionPerformed() {
+	startNewGame();
+	}
+
+	}
+	 */
 }
-
-
-
-
-
-

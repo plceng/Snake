@@ -18,6 +18,7 @@ public class ControlPanel extends JPanel {
 	public ControlPanel(ActionListener newGameActionListener) {
 		newGameButton = new JButton("New Game");
 		newGameButton.addActionListener(newGameActionListener);
+		setLayout(new GridLayout(3, 1));
 		add(fieldWidth);
 		add(fieldHeigth);
 		add(newGameButton);

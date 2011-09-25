@@ -1,12 +1,13 @@
 package dev.link.snake;
 
+import java.awt.Color;
 import java.util.*;
 
 public class SnakeBody  implements Controlable {
 
 	private ArrayList<BodyBlock> body;
 	private boolean valid = true;
-	private String playerName = GameParameters.FIRST_PLAYER_NAME;
+	private Player player;
 	private int snakeID = 1;
 
 	private MovementVector moveVector;
@@ -20,13 +21,13 @@ public class SnakeBody  implements Controlable {
 		body.add(0, new BodyBlock(13,10));
 	}
 
-	public SnakeBody(int initX, int initY, String playerName) {
+	public SnakeBody(int initX, int initY, Player player) {
 		moveVector = new MovementVector();
 		body = new ArrayList<BodyBlock>();
 		for (int i = 0; i < 5; i++) {
 			body.add(0, new BodyBlock(initX + i,initY));
 		}
-		this.playerName = playerName;
+		this.player = player;
 	}
 
 	
@@ -121,7 +122,7 @@ public class SnakeBody  implements Controlable {
 		// Проверка на самосъедание
 		if (body.contains(newFirstBlock)) {
 			setValid(false);
-			System.out.println("Game over for player " + this.playerName);
+			System.out.println("Game over for player " + this.player);
 		}
 		else 
 			body.add(0, newFirstBlock);
@@ -144,6 +145,10 @@ public class SnakeBody  implements Controlable {
 		Controlable snakeBody = new SnakeBody();
 		System.out.println(snakeBody);
 //		System.out.println(snakeBody);
+	}
+
+	public Color getColor() {
+		return player.getSnakeColor();
 	}
 	
 }

@@ -3,42 +3,71 @@ package dev.link.snake;
 import java.util.*;
 import java.awt.Dimension;
 import dev.link.snake.gui.SnakeTheGame;
+import java.awt.Color;
+import java.util.Map.Entry;
 
 public class GameFieldModel {
-	private Map<String,SnakeBody> snakes;
+
+	private Map<Player, SnakeBody> snakes;
 	private Rabbit rabbit;
 	private Dimension fieldSize;
-	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25,25);
+	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25, 25);
 	private boolean rabbitIsAlive = true;
-	
 	private Random rand = new Random();
-	
+
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
-		snakes = new HashMap<String,SnakeBody>();
-//		twoPlayerModel();
+		snakes = new HashMap<Player, SnakeBody>();
+//		addPlayersAndSnakes();
 //		onePlayerModel();
 		createRabbit();
 	}
 
-	public final void onePlayerModel() {
-		snakes.put("First_player", new SnakeBody());
+	public void addPlayersAndSnakes(String[] playerNames, Color[] playerColors) {
+		// TODO допилить
+		for (int i = 0; i < playerNames.length; i++) {
+			try {
+				Player newPlayer = new Player(playerNames[i], playerColors[i]);
+				GameParameters.players.add(newPlayer);
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				System.out.format("Color for player [%s] isn't set. Using default %n", playerNames[i]);
+				GameParameters.players.add(new Player(playerNames[i]));
+				continue;
+			}
+		}
+		addSnakes();
 	}
 
-	public final void twoPlayerModel() {
-		snakes.put(GameParameters.FIRST_PLAYER_NAME, new SnakeBody(10, 10, GameParameters.FIRST_PLAYER_NAME));
-		snakes.put(GameParameters.SECOND_PLAYER_NAME, new SnakeBody(15, 15, GameParameters.SECOND_PLAYER_NAME));
+	public void addPlayersAndSnakes(int quantity) {
+		for (int i = 1; i <= quantity; i++) {
+			Player newPlayer = new Player(String.valueOf(i));
+			newPlayer.setControlKeys(GameParameters.DEFAULT_KEY_SET[i-1]);
+			GameParameters.players.add(newPlayer);
+		}
+		addSnakes();
+		System.out.println(snakes);
 	}
-	
+
+	//for debug
+
+	private void addSnakes() {
+		for (Player p : GameParameters.players) {
+			snakes.put(p, new SnakeBody(rand.nextInt(fieldSize.width),
+					rand.nextInt(fieldSize.height), p));
+		}
+	}
+
 	private void createRabbit() {
 		int newRabbitXcoord = rand.nextInt(fieldSize.height);
 		int newRabbitYcoord = rand.nextInt(fieldSize.width);
 		rabbit = new Rabbit(newRabbitXcoord, newRabbitYcoord);
 		rabbitIsAlive = true;
 	}
-	
-	private void killRabbit() { rabbitIsAlive = false; }
-		
+
+	private void killRabbit() {
+		rabbitIsAlive = false;
+	}
+
 	public void moveSnakes() {
 		for (SnakeBody snake : snakes.values()) {
 			// Правило 1: Съеден ли кролик?
@@ -46,70 +75,83 @@ public class GameFieldModel {
 				snake.grow();
 				killRabbit();
 				createRabbit();
-			}
-			else if (snake.isValid())
+			} else if (snake.isValid()) {
 				snake.move();
+			}
 		}
 	}
-	
+
 	public void moveRabbit() {
 		// а жив ли кролик?
-		if (!rabbitIsAlive)
+		if (!rabbitIsAlive) {
 			createRabbit();
+		}
 		// сначала выберем рандомный поворот
 		int intTurnDirection = rand.nextInt(4); // т.к. 4 стороны поворота
 //		System.out.println("intTurnDirection" + intTurnDirection);
 		rabbit.turn(intTurnDirection);
 		// Если тело "тестового" кролика не попадает в змейку :), то двигать реального в том же направлении 
-		if (rabbitWillBeInSnakes())
+		if (rabbitWillBeInSnakes()) {
 			moveRabbit(); // ещё раз меняеем направление
-		else
+		} else {
 			rabbit.move();
+		}
 		// а если попадает, то выбрать направление ещё раз
 
 	}
-	
+
 	private boolean rabbitWillBeInSnakes() {
 		Rabbit futureRabbit = new Rabbit(rabbit);
 		futureRabbit.move();
 		boolean result = false;
 		for (SnakeBody snake : snakes.values()) {
 			result = result || snake.getBody().contains(futureRabbit.getBody());
-			if (result)
+			if (result) {
 				return result;
+			}
 		}
 		return result;
-		
+
 	}
 //-------------	
 // 	Эти методы нужны для независимого управления телами змеек, 
 //	если их несколько. 	
-	public void turnSnakeLeft(String playerName) {
-			snakes.get(playerName).turnLeft();
-	}	
 
-	public void turnSnakeRight(String playerName) {
-		snakes.get(playerName).turnRigth();
-	}	
-
-	public void turnSnakeUp(String playerName) {
-		snakes.get(playerName).turnUp();
+	public void turnSnakeLeft(Player player) {
+		snakes.get(player).turnLeft();
 	}
-	
-	public void turnSnakeDown(String playerName) {
-		snakes.get(playerName).turnDown();
+
+	public void turnSnakeRight(Player player) {
+		snakes.get(player).turnRigth();
+	}
+
+	public void turnSnakeUp(Player player) {
+		snakes.get(player).turnUp();
+//		try {
+//		snakes.get(player).turnUp();
+//		} catch (Exception ex) {
+//			System.out.println("ДАВАААААЙ");
+//		}
+	}
+
+	public void turnSnakeDown(Player player) {
+		snakes.get(player).turnDown();
 	}
 //------------
 
 	/**
 	 * Returns the value of snakes.
 	 */
-	public Collection<SnakeBody> getAllSnakes() { return snakes.values(); }
-	
+	public Collection<SnakeBody> getAllSnakes() {
+		return snakes.values();
+	}
+
 	/**
 	 * Returns the value of rabbit.
 	 */
-	 public Rabbit getRabbit() { return rabbit; }
+	public Rabbit getRabbit() {
+		return rabbit;
+	}
 
 	/**
 	 * Returns the value of fieldSize.
@@ -125,31 +167,29 @@ public class GameFieldModel {
 	public double getFieldHeight() {
 		return fieldSize.getHeight();
 	}
-	
+
 	/**
 	 * Sets the value of fieldSize in int values.
 	 */
-	 public void setFieldSize(int width, int height) {
-	 	 this.fieldSize.width = width;
-	 	 this.fieldSize.height = height;
-	 	 BodyBlock.COORD_LIMITS = this.fieldSize;
-	 }
-	 
+	public void setFieldSize(int width, int height) {
+		this.fieldSize.width = width;
+		this.fieldSize.height = height;
+		BodyBlock.COORD_LIMITS = this.fieldSize;
+	}
+
 	/**
 	 * Sets the value of fieldSize in Dimension value.
 	 */
+	public void setFieldSize(Dimension fieldSize) {
+		this.fieldSize = fieldSize;
+		BodyBlock.COORD_LIMITS = this.fieldSize;
+	}
 
-	 public void setFieldSize(Dimension fieldSize) {
-	 	 this.fieldSize = fieldSize;
-	 	 BodyBlock.COORD_LIMITS = this.fieldSize;
-	 }
-	 
-	 public static void main(String[] args) {
-	 	 HashSet<SnakeBody> snakes = new HashSet<SnakeBody>();
-	 	 System.out.println(snakes.add(new SnakeBody()));
-	 	 for (SnakeBody snake : snakes) {
-	 	 	 System.out.println(snake);
-	 	 }
-	 }
-
+	public static void main(String[] args) {
+		HashSet<SnakeBody> snakes = new HashSet<SnakeBody>();
+		System.out.println(snakes.add(new SnakeBody()));
+		for (SnakeBody snake : snakes) {
+			System.out.println(snake);
+		}
+	}
 }
