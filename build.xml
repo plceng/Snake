@@ -12,7 +12,7 @@
 	</target>
 	
 	<target name="compile" description="Compiling" depends="make.dir">
-		<javac destdir="build/classes">
+		<javac destdir="build/classes" debug="true">
 			<src path = "src"/>
 		</javac>
 	</target>

@@ -14,6 +14,7 @@ public class Player {
 	private String name;
 	private int score;
 	private Color snakeColor;
+	private SnakeBody snake;
 	// Control keys
 	private int leftKey;
 	private int rightKey;
@@ -27,10 +28,11 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player{" + "name=" + name + "score=" + score +
-				"snakeColor=" + snakeColor + "leftKey=" + leftKey +
-				"rightKey=" + rightKey + "upKey=" + upKey +
-				"downKey=" + downKey + '}';
+		return "Player{" + "name=" + name + "score=" + score
+				+ "snakeBody=" + snake
+				+ "snakeColor=" + snakeColor + "leftKey=" + leftKey
+				+ "rightKey=" + rightKey + "upKey=" + upKey
+				+ "downKey=" + downKey + '}';
 	}
 
 	public Player(String name) {
@@ -123,11 +125,11 @@ public class Player {
 
 	public int[] getControlKeys() {
 		int[] controlKeys = {
-								getLeftKey(),
-								getRightKey(),
-								getUpKey(),
-								getDownKey()
-							};
+			getLeftKey(),
+			getRightKey(),
+			getUpKey(),
+			getDownKey()
+		};
 //		return {getLeftKey(), getRightKey(), getUpKey(), getDownKey() };
 		return controlKeys;
 	}
@@ -154,5 +156,31 @@ public class Player {
 		hash = 29 * hash + this.score;
 		hash = 29 * hash + (this.snakeColor != null ? this.snakeColor.hashCode() : 0);
 		return hash;
+	}
+
+	void killSnake() {
+		snake.setValid(false);
+	}
+
+	/**
+	 * Get the value of snake
+	 *
+	 * @return the value of snake
+	 */
+	public SnakeBody getSnake() {
+		return snake;
+	}
+
+	/**
+	 * Set the value of snake
+	 *
+	 * @param snake new value of snake
+	 */
+	public void setSnake(SnakeBody snake) {
+		this.snake = snake;
+	}
+
+	public void eatPartOfSnakeBoby(BodyBlock whichPart) {
+		snake.getBody().remove(whichPart);
 	}
 }

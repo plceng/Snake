@@ -2,22 +2,24 @@ package dev.link.snake;
 
 import java.util.*;
 import java.awt.Dimension;
-import dev.link.snake.gui.SnakeTheGame;
 import java.awt.Color;
-import java.util.Map.Entry;
 
 public class GameFieldModel {
 
+
 	private Map<Player, SnakeBody> snakes;
+//	private Collection<SnakeBody> snakes;
 	private Rabbit rabbit;
 	private Dimension fieldSize;
 	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25, 25);
 	private boolean rabbitIsAlive = true;
 	private Random rand = new Random();
+	public static Player[][] fieldCells;
 
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
 		snakes = new HashMap<Player, SnakeBody>();
+		fieldCells = new Player[fieldSize.width][fieldSize.height];
 //		addPlayersAndSnakes();
 //		onePlayerModel();
 		createRabbit();
@@ -35,27 +37,53 @@ public class GameFieldModel {
 				continue;
 			}
 		}
-		addSnakes();
+		addRandomSnakes();
 	}
 
 	public void addPlayersAndSnakes(int quantity) {
 		for (int i = 1; i <= quantity; i++) {
 			Player newPlayer = new Player(String.valueOf(i));
-			newPlayer.setControlKeys(GameParameters.DEFAULT_KEY_SET[i-1]);
+			newPlayer.setControlKeys(GameParameters.DEFAULT_KEY_SET[i - 1]);
 			GameParameters.players.add(newPlayer);
 		}
-		addSnakes();
-		System.out.println(snakes);
+//		System.out.println(GameParameters.players);
+		addRandomSnakes();
+		bindSnakesForPlayers();
+
+		//System.out.println(snakes);
 	}
 
-	//for debug
-
-	private void addSnakes() {
+	private void addRandomSnakes() {
 		for (Player p : GameParameters.players) {
-			snakes.put(p, new SnakeBody(rand.nextInt(fieldSize.width),
-					rand.nextInt(fieldSize.height), p));
+			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
+					rand.nextInt(fieldSize.height), p);
+			addSnakeToFieldCell(newSnake);
+			snakes.put(p, newSnake);
 		}
 	}
+
+	private void bindSnakesForPlayers() {
+		for (Player p : snakes.keySet()) {
+			p.setSnake(snakes.get(p));
+		}
+	}
+
+	private void addSnakeToFieldCell(SnakeBody newSnake) {
+		Player newPlayer = newSnake.getPlayer();
+		for (BodyBlock b : newSnake.getBody()) {
+			fieldCells[b.getCoordX()][b.getCoordY()] = newPlayer;
+		}
+
+	}
+
+	static void addToFieldCell(BodyBlock newBlock, Player player) {
+		fieldCells[newBlock.getCoordX()][newBlock.getCoordY()] = player;
+	}
+
+	static void removeFromFieldCell(int x, int y) {
+		fieldCells[x][y] = null;
+	}
+	//for debug
 
 	private void createRabbit() {
 		int newRabbitXcoord = rand.nextInt(fieldSize.height);
@@ -70,14 +98,45 @@ public class GameFieldModel {
 
 	public void moveSnakes() {
 		for (SnakeBody snake : snakes.values()) {
-			// Правило 1: Съеден ли кролик?
+			if (!snake.isValid()) continue;
+			// Ситуация 1: Съеден кролик
 			if (snake.getBody().contains(rabbit.getBody())) {
 				snake.grow();
 				killRabbit();
 				createRabbit();
-			} else if (snake.isValid()) {
+			} //Ситуация 2: Съеден кусок другой змеи
+			else if (eatOtherSnake(snake)) {
+				snake.grow();
+			} // Если ни одна особая ситуация не произошла, то просто двигаем змею
+			else if (snake.isValid()) {
 				snake.move();
 			}
+		}
+	}
+	public static void printFieldCells() {
+		for (int i = 0; i < fieldCells.length; i++) {
+			for (int j = 0; j < fieldCells[i].length; j++) {
+				System.out.format("fieldCells[%d][%d] = %s", i, j, fieldCells[i][j]);
+			}
+		}
+	}
+
+	private boolean eatOtherSnake(SnakeBody thisSnake) {
+	//	boolean result = false;
+		BodyBlock head = thisSnake.getBody().get(0);
+		int headX = head.getCoordX();
+		int headY = head.getCoordY();
+		Player otherPlayer = fieldCells[headX][headY];
+//		printFieldCells();
+		if (!otherPlayer.equals(thisSnake.getPlayer())
+				&& otherPlayer != null) {
+			// убиваем съеденную змею
+			otherPlayer.killSnake();
+			// Съедаем тот кусок убитой змеи, который укушен (головой :))
+			otherPlayer.eatPartOfSnakeBoby(head); 
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -175,6 +234,7 @@ public class GameFieldModel {
 		this.fieldSize.width = width;
 		this.fieldSize.height = height;
 		BodyBlock.COORD_LIMITS = this.fieldSize;
+		fieldCells = new Player[width][height];
 	}
 
 	/**
