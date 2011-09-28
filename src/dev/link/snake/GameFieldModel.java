@@ -13,11 +13,13 @@ public class GameFieldModel {
 	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25, 25);
 	private boolean rabbitIsAlive = true;
 	private Random rand = new Random();
+	private Set<SnakeBody> snakesSet;
 //	public static Player[][] fieldCells;
 
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
 		gameField = new HashMap<BodyBlock, SnakeBody>();
+		snakesSet = new HashSet<SnakeBody>();
 //		fieldCells = new Player[fieldSize.width][fieldSize.height];
 //		addRandomPlayersAndSnakes();
 //		onePlayerModel();
@@ -49,6 +51,9 @@ public class GameFieldModel {
 					rand.nextInt(fieldSize.height), newPlayer);
 			// связываем теперь Игрока со змеёй.
 			newPlayer.setSnake(newSnake);
+			addToSnakesSet(newSnake);
+
+			// TODO А нужен ли этот массив
 			// Добавим игрока в глобальный массив для чего-нибудь
 			GameParameters.players.add(newPlayer);
 
@@ -60,6 +65,16 @@ public class GameFieldModel {
 		//System.out.println(snakes);
 	}
 
+	private boolean addToSnakesSet(SnakeBody snake) {
+		return snakesSet.add(snake);
+	}
+
+	/**
+	 * Returns the value of snakesSet.
+	 */
+	public Collection<SnakeBody> getAllSnakes() {
+		return snakesSet;
+	}
 //	private void addRandomSnakes() {
 //		for (Player p : GameParameters.players) {
 //			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
@@ -108,7 +123,7 @@ public class GameFieldModel {
 	}
 
 	public void moveSnakes() {
-		for (SnakeBody snake : gameField.values()) {
+		for (SnakeBody snake : getAllSnakes()) {
 			if (!snake.isAlive()) { // Мертвых змей не проверяем
 				continue;
 			}
@@ -150,10 +165,10 @@ public class GameFieldModel {
 		int headX = thisHead.getCoordX();
 		int headY = thisHead.getCoordY();
 		Player otherPlayer = null;
-		for (SnakeBody otherSnake : gameField.values()) {
+		for (SnakeBody otherSnake : getAllSnakes()) {
 			if (otherSnake.getBody().contains(thisHead)
 					//исключение себя
-					&& (otherSnake.getPlayer().equals(thisSnake.getPlayer()))) {
+					&& (!otherSnake.getPlayer().equals(thisSnake.getPlayer()))) {
 				otherSnake.takeaBite(thisHead);
 				SnakeBody removedSnakeBlock = gameField.remove(thisHead);
 				System.out.println("Съеденная змея: " + removedSnakeBlock);
@@ -188,7 +203,7 @@ public class GameFieldModel {
 		Rabbit futureRabbit = new Rabbit(rabbit);
 		futureRabbit.move();
 		boolean result = false;
-		for (SnakeBody snake : gameField.values()) {
+		for (SnakeBody snake : getAllSnakes()) {
 			result = result || snake.getBody().contains(futureRabbit.getBody());
 			if (result) {
 				return result;
@@ -223,12 +238,7 @@ public class GameFieldModel {
 //	}
 //------------
 
-	/**
-	 * Returns the value of snakes.
-	 */
-	public Collection<SnakeBody> getAllSnakes() {
-		return gameField.values();
-	}
+
 
 	/**
 	 * Returns the value of rabbit.

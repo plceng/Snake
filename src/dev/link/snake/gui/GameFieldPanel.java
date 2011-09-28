@@ -34,14 +34,14 @@ public class GameFieldPanel extends JPanel {
 		int keyListenerNum = 0;
 		//TODO «јменить GameParameters.players на fieldModel.getPlayers()
 		try {
-		for (SnakeBody sn : fieldModel.getAllSnakes()) {
-			keyHandlers[keyListenerNum] = new KeyHandler(sn);
+			for (SnakeBody sn : fieldModel.getAllSnakes()) {
+				keyHandlers[keyListenerNum] = new KeyHandler(sn);
 
-			addKeyListener(keyHandlers[keyListenerNum]);
-			System.out.println(keyHandlers[keyListenerNum]);
-			keyListenerNum++;
+				addKeyListener(keyHandlers[keyListenerNum]);
+				System.out.println(keyHandlers[keyListenerNum]);
+				keyListenerNum++;
 //			System.out.println(p);
-		}
+			}
 //		System.out.println(keyHandlers);
 		} catch (NullPointerException ex) {
 			System.out.println("fieldModel.getAllSnakes() returns NULL");
@@ -150,13 +150,15 @@ public class GameFieldPanel extends JPanel {
 	}
 
 	private class KeyHandler extends KeyAdapter {
-	// а нужны ли эти пол€?..
+		// а нужны ли эти пол€?..
+
 		private int turnLeftKey;
 		private int turnRightKey;
 		private int turnUpKey;
 		private int turnDownKey;
-	// Ѕез них при каждом нажатии клавиши будет обращение по ссылке к методу get...Key игрока
+		// Ѕез них при каждом нажатии клавиши будет обращение по ссылке к методу get...Key игрока
 		private SnakeBody snake;
+
 		public KeyHandler(SnakeBody snake) {
 			this.snake = snake;
 			initControlKeys();
@@ -186,13 +188,12 @@ public class GameFieldPanel extends JPanel {
 
 		@Override
 		public String toString() {
-			return "KeyHandler{" + "turnLeftKey=" + turnLeftKey +
-					"turnRightKey=" + turnRightKey + "turnUpKey=" + turnUpKey +
-					"turnDownKey=" + turnDownKey + "player=" + snake + '}';
+			return "KeyHandler{" + "turnLeftKey=" + turnLeftKey
+					+ "turnRightKey=" + turnRightKey + "turnUpKey=" + turnUpKey
+					+ "turnDownKey=" + turnDownKey + "player=" + snake + '}';
 		}
 	}
 
-	public static void main (String args) {
-
+	public static void main(String args) {
 	}
 }
