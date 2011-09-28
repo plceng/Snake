@@ -32,8 +32,10 @@ public class GameFieldPanel extends JPanel {
 	public void initHandlers() {
 		removeKeyListeners();
 		int keyListenerNum = 0;
-		for (Player p : GameParameters.players) {
-			keyHandlers[keyListenerNum] = new KeyHandler(p);
+		//TODO ЗАменить GameParameters.players на fieldModel.getPlayers()
+		try {
+		for (SnakeBody sn : fieldModel.getAllSnakes()) {
+			keyHandlers[keyListenerNum] = new KeyHandler(sn);
 
 			addKeyListener(keyHandlers[keyListenerNum]);
 			System.out.println(keyHandlers[keyListenerNum]);
@@ -41,6 +43,10 @@ public class GameFieldPanel extends JPanel {
 //			System.out.println(p);
 		}
 //		System.out.println(keyHandlers);
+		} catch (NullPointerException ex) {
+			System.out.println("fieldModel.getAllSnakes() returns NULL");
+			ex.printStackTrace();
+		}
 	}
 
 	public boolean removeKeyListeners() {
@@ -150,14 +156,14 @@ public class GameFieldPanel extends JPanel {
 		private int turnUpKey;
 		private int turnDownKey;
 	// Без них при каждом нажатии клавиши будет обращение по ссылке к методу get...Key игрока
-		private Player player;
-
-		public KeyHandler(Player player) {
-			this.player = player;
+		private SnakeBody snake;
+		public KeyHandler(SnakeBody snake) {
+			this.snake = snake;
 			initControlKeys();
 		}
 
 		private void initControlKeys() {
+			Player player = snake.getPlayer();
 			this.turnLeftKey = player.getLeftKey();
 			this.turnRightKey = player.getRightKey();
 			this.turnUpKey = player.getUpKey();
@@ -168,13 +174,13 @@ public class GameFieldPanel extends JPanel {
 			int keyCode = keyEvent.getKeyCode();
 			// Обработка нажатой клавиши
 			if (keyCode == turnLeftKey) {
-				fieldModel.turnSnakeLeft(player);
+				snake.turnLeft();
 			} else if (keyCode == turnRightKey) {
-				fieldModel.turnSnakeRight(player);
+				snake.turnRight();
 			} else if (keyCode == turnUpKey) {
-				fieldModel.turnSnakeUp(player);
+				snake.turnUp();
 			} else if (keyCode == turnDownKey) {
-				fieldModel.turnSnakeDown(player);
+				snake.turnDown();
 			}
 		}
 
@@ -182,7 +188,7 @@ public class GameFieldPanel extends JPanel {
 		public String toString() {
 			return "KeyHandler{" + "turnLeftKey=" + turnLeftKey +
 					"turnRightKey=" + turnRightKey + "turnUpKey=" + turnUpKey +
-					"turnDownKey=" + turnDownKey + "player=" + player + '}';
+					"turnDownKey=" + turnDownKey + "player=" + snake + '}';
 		}
 	}
 

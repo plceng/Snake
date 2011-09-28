@@ -6,21 +6,20 @@ import java.awt.Color;
 
 public class GameFieldModel {
 
-
-	private Map<Player, SnakeBody> snakes;
+	private Map<BodyBlock, SnakeBody> gameField;
 //	private Collection<SnakeBody> snakes;
 	private Rabbit rabbit;
-	private Dimension fieldSize;
+	private static Dimension fieldSize;
 	public static final Dimension DEFAULT_FIELD_SIZE = new Dimension(25, 25);
 	private boolean rabbitIsAlive = true;
 	private Random rand = new Random();
-	public static Player[][] fieldCells;
+//	public static Player[][] fieldCells;
 
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
-		snakes = new HashMap<Player, SnakeBody>();
-		fieldCells = new Player[fieldSize.width][fieldSize.height];
-//		addPlayersAndSnakes();
+		gameField = new HashMap<BodyBlock, SnakeBody>();
+//		fieldCells = new Player[fieldSize.width][fieldSize.height];
+//		addRandomPlayersAndSnakes();
 //		onePlayerModel();
 		createRabbit();
 	}
@@ -37,54 +36,60 @@ public class GameFieldModel {
 				continue;
 			}
 		}
-		addRandomSnakes();
+//		addRandomSnakes();
 	}
 
-	public void addPlayersAndSnakes(int quantity) {
+	public void addRandomPlayersAndSnakes(int quantity) {
 		for (int i = 1; i <= quantity; i++) {
+			// игрок
 			Player newPlayer = new Player(String.valueOf(i));
 			newPlayer.setControlKeys(GameParameters.DEFAULT_KEY_SET[i - 1]);
+			// его змейка :) Указываем игрока в конструкторе
+			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
+					rand.nextInt(fieldSize.height), newPlayer);
+			// связываем теперь Игрока со змеёй.
+			newPlayer.setSnake(newSnake);
+			// Добавим игрока в глобальный массив для чего-нибудь
 			GameParameters.players.add(newPlayer);
-		}
-//		System.out.println(GameParameters.players);
-		addRandomSnakes();
-		bindSnakesForPlayers();
 
+			//закладываем в this.gameField значения типа (кусок змеи ; змея)
+			for (BodyBlock b : newSnake.getBody()) {
+				gameField.put(b, newSnake);
+			}
+		}
 		//System.out.println(snakes);
 	}
 
-	private void addRandomSnakes() {
-		for (Player p : GameParameters.players) {
-			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
-					rand.nextInt(fieldSize.height), p);
-			addSnakeToFieldCell(newSnake);
-			snakes.put(p, newSnake);
-		}
-	}
-
-	private void bindSnakesForPlayers() {
-		for (Player p : snakes.keySet()) {
-			p.setSnake(snakes.get(p));
-		}
-	}
-
-	private void addSnakeToFieldCell(SnakeBody newSnake) {
-		Player newPlayer = newSnake.getPlayer();
-		for (BodyBlock b : newSnake.getBody()) {
-			fieldCells[b.getCoordX()][b.getCoordY()] = newPlayer;
-		}
-
-	}
-
-	static void addToFieldCell(BodyBlock newBlock, Player player) {
-		fieldCells[newBlock.getCoordX()][newBlock.getCoordY()] = player;
-	}
-
-	static void removeFromFieldCell(int x, int y) {
-		fieldCells[x][y] = null;
-	}
+//	private void addRandomSnakes() {
+//		for (Player p : GameParameters.players) {
+//			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
+//					rand.nextInt(fieldSize.height), p);
+//			addSnakeToFieldCell(newSnake);
+//			gameField.put(p, newSnake);
+//		}
+//	}
+//	private void bindSnakesForPlayers() {
+//		for (Player p : gameField.keySet()) {
+//			p.setSnake(gameField.get(p));
+//		}
+//	}
+//
+//	private void addSnakeToFieldCell(SnakeBody newSnake) {
+//		Player newPlayer = newSnake.getPlayer();
+//		for (BodyBlock b : newSnake.getBody()) {
+//			fieldCells[b.getCoordX()][b.getCoordY()] = newPlayer;
+//		}
+//
+//	}
+//
+//	static void addToFieldCell(BodyBlock newBlock, Player player) {
+//		fieldCells[newBlock.getCoordX()][newBlock.getCoordY()] = player;
+//	}
+//
+//	static void removeFromFieldCell(int x, int y) {
+//		fieldCells[x][y] = null;
+//	}
 	//for debug
-
 	private void createRabbit() {
 		int newRabbitXcoord = rand.nextInt(fieldSize.height);
 		int newRabbitYcoord = rand.nextInt(fieldSize.width);
@@ -92,52 +97,72 @@ public class GameFieldModel {
 		rabbitIsAlive = true;
 	}
 
+	private void growSnake(SnakeBody snake) {
+		snake.grow();
+		BodyBlock snakeHead = snake.getHead();
+		gameField.put(snakeHead, snake);
+	}
+
 	private void killRabbit() {
 		rabbitIsAlive = false;
 	}
 
 	public void moveSnakes() {
-		for (SnakeBody snake : snakes.values()) {
-			if (!snake.isValid()) continue;
+		for (SnakeBody snake : gameField.values()) {
+			if (!snake.isAlive()) { // Мертвых змей не проверяем
+				continue;
+			}
 			// Ситуация 1: Съеден кролик
 			if (snake.getBody().contains(rabbit.getBody())) {
-				snake.grow();
+				growSnake(snake);
 				killRabbit();
 				createRabbit();
 			} //Ситуация 2: Съеден кусок другой змеи
 			else if (eatOtherSnake(snake)) {
-				snake.grow();
-			} // Если ни одна особая ситуация не произошла, то просто двигаем змею
-			else if (snake.isValid()) {
-				snake.move();
+				growSnake(snake);
 			}
-		}
-	}
-	public static void printFieldCells() {
-		for (int i = 0; i < fieldCells.length; i++) {
-			for (int j = 0; j < fieldCells[i].length; j++) {
-				System.out.format("fieldCells[%d][%d] = %s", i, j, fieldCells[i][j]);
+			else if (snake.isAlive()) {
+				moveSnake(snake);
 			}
 		}
 	}
 
+	private void moveSnake(SnakeBody snake) {
+		snake.move();
+		// шаг - это добавление в поле головы и удаление хвоста
+		BodyBlock snakeTail = snake.getTail();
+		gameField.remove(snakeTail);
+		BodyBlock snakeHead = snake.getHead();
+		gameField.put(snakeHead, snake);
+	}
+
+//	public static void printFieldCells() {
+//		for (int i = 0; i < fieldCells.length; i++) {
+//			for (int j = 0; j < fieldCells[i].length; j++) {
+//				System.out.format("fieldCells[%d][%d] = %s", i, j, fieldCells[i][j]);
+//			}
+//		}
+//	}
+
 	private boolean eatOtherSnake(SnakeBody thisSnake) {
-	//	boolean result = false;
-		BodyBlock head = thisSnake.getBody().get(0);
-		int headX = head.getCoordX();
-		int headY = head.getCoordY();
-		Player otherPlayer = fieldCells[headX][headY];
-//		printFieldCells();
-		if (!otherPlayer.equals(thisSnake.getPlayer())
-				&& otherPlayer != null) {
-			// убиваем съеденную змею
-			otherPlayer.killSnake();
-			// Съедаем тот кусок убитой змеи, который укушен (головой :))
-			otherPlayer.eatPartOfSnakeBoby(head); 
-			return true;
-		} else {
-			return false;
+		//	boolean result = false;
+		BodyBlock thisHead = thisSnake.getBody().get(0);
+		int headX = thisHead.getCoordX();
+		int headY = thisHead.getCoordY();
+		Player otherPlayer = null;
+		for (SnakeBody otherSnake : gameField.values()) {
+			if (otherSnake.getBody().contains(thisHead)
+					//исключение себя
+					&& (otherSnake.getPlayer().equals(thisSnake.getPlayer()))) {
+				otherSnake.takeaBite(thisHead);
+				SnakeBody removedSnakeBlock = gameField.remove(thisHead);
+				System.out.println("Съеденная змея: " + removedSnakeBlock);
+				gameField.put(thisHead, thisSnake);
+				System.out.println("Съевшая змея: " + removedSnakeBlock);
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public void moveRabbit() {
@@ -163,7 +188,7 @@ public class GameFieldModel {
 		Rabbit futureRabbit = new Rabbit(rabbit);
 		futureRabbit.move();
 		boolean result = false;
-		for (SnakeBody snake : snakes.values()) {
+		for (SnakeBody snake : gameField.values()) {
 			result = result || snake.getBody().contains(futureRabbit.getBody());
 			if (result) {
 				return result;
@@ -176,33 +201,33 @@ public class GameFieldModel {
 // 	Эти методы нужны для независимого управления телами змеек, 
 //	если их несколько. 	
 
-	public void turnSnakeLeft(Player player) {
-		snakes.get(player).turnLeft();
-	}
-
-	public void turnSnakeRight(Player player) {
-		snakes.get(player).turnRigth();
-	}
-
-	public void turnSnakeUp(Player player) {
-		snakes.get(player).turnUp();
-//		try {
-//		snakes.get(player).turnUp();
-//		} catch (Exception ex) {
-//			System.out.println("ДАВАААААЙ");
-//		}
-	}
-
-	public void turnSnakeDown(Player player) {
-		snakes.get(player).turnDown();
-	}
+//	public void turnSnakeLeft(SnakeBody snake) {
+//		snake.turnLeft();
+//	}
+//
+//	public void turnSnakeRight(SnakeBody snake) {
+//		snake.turnRight();
+//	}
+//
+//	public void turnSnakeUp(SnakeBody snake) {
+//		snake.turnUp();
+////		try {
+////		snakes.get(player).turnUp();
+////		} catch (Exception ex) {
+////			System.out.println("ДАВАААААЙ");
+////		}
+//	}
+//
+//	public void turnSnakeDown(SnakeBody snake) {
+//		snake.turnDown();
+//	}
 //------------
 
 	/**
 	 * Returns the value of snakes.
 	 */
 	public Collection<SnakeBody> getAllSnakes() {
-		return snakes.values();
+		return gameField.values();
 	}
 
 	/**
@@ -215,7 +240,7 @@ public class GameFieldModel {
 	/**
 	 * Returns the value of fieldSize.
 	 */
-	public Dimension getFieldSize() {
+	public static Dimension getFieldSize() {
 		return fieldSize;
 	}
 
@@ -234,7 +259,6 @@ public class GameFieldModel {
 		this.fieldSize.width = width;
 		this.fieldSize.height = height;
 		BodyBlock.COORD_LIMITS = this.fieldSize;
-		fieldCells = new Player[width][height];
 	}
 
 	/**

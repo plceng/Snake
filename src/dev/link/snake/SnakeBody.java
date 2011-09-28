@@ -6,7 +6,7 @@ import java.util.*;
 public class SnakeBody implements Controlable {
 
 	private ArrayList<BodyBlock> body;
-	private boolean valid = true;
+	private boolean alive = true;
 	private Player player;
 	private int snakeID = 1;
 	private MovementVector moveVector;
@@ -23,15 +23,15 @@ public class SnakeBody implements Controlable {
 	public SnakeBody(int initX, int initY, Player player) {
 		moveVector = new MovementVector();
 		body = new ArrayList<BodyBlock>();
-		int maxX = GameFieldModel.fieldCells[initX].length;
-		int maxY = GameFieldModel.fieldCells.length;
+		int maxX = GameFieldModel.getFieldSize().width;
+		int maxY = GameFieldModel.getFieldSize().height;
 		for (int i = 0, newX, newY; i < 5; i++) {
 			newX = (initX + i > maxX) ?
 					maxX - initX + i :
 					initX + i;
 			newY = (initY + i > maxY) ?
-					maxY - initY + i :
-					initY + i;
+					maxY - initY :
+					initY;
 			body.add(0, new BodyBlock(newX, newY));
 		}
 		this.player = player;
@@ -63,7 +63,7 @@ public class SnakeBody implements Controlable {
 	public int hashCode() {
 		int hash = 7;
 		hash = 97 * hash + (this.body != null ? this.body.hashCode() : 0);
-		hash = 97 * hash + (this.valid ? 1 : 0);
+		hash = 97 * hash + (this.alive ? 1 : 0);
 		hash = 97 * hash + (this.player != null ? this.player.hashCode() : 0);
 		hash = 97 * hash + this.snakeID;
 		hash = 97 * hash + (this.moveVector != null ? this.moveVector.hashCode() : 0);
@@ -84,28 +84,12 @@ public class SnakeBody implements Controlable {
 				? true : false;
 	}
 
-	/**
-
-	 * Returns the value of snakeID.
-
-	 */
-	public int getSnakeID() {
-
-		return snakeID;
-
+	public BodyBlock getHead() {
+		return body.get(0);
 	}
 
-	/**
-
-	 * Sets the value of snakeID.
-
-	 * @param snakeID The value to assign snakeID.
-
-	 */
-	public void setSnakeID(int snakeID) {
-
-		this.snakeID = snakeID;
-
+	public BodyBlock getTail() {
+		return body.get(body.size() - 1);
 	}
 
 	/**
@@ -131,7 +115,7 @@ public class SnakeBody implements Controlable {
 		moveVector.setDirection(MovementDirection.DIR_LEFT);
 	}
 
-	public void turnRigth() {
+	public void turnRight() {
 		moveVector.setDirection(MovementDirection.DIR_RIGHT);
 	}
 
@@ -165,27 +149,25 @@ public class SnakeBody implements Controlable {
 		}
 		// Проверка на самосъедание
 		if (body.contains(newFirstBlock)) {
-			setValid(false);
+			setAlive(false);
 			System.out.println("Game over for player " + this.player);
 		} else {
-			GameFieldModel.addToFieldCell( newFirstBlock, this.getPlayer() );
+//			GameFieldModel.addToFieldCell( newFirstBlock, this.getPlayer() );
 			body.add(0, newFirstBlock);
 		}
 	}
 
 	public void move() {
-		BodyBlock removedBlock = body.remove(body.size() - 1);
-		GameFieldModel.removeFromFieldCell(removedBlock.getCoordX(),
-				removedBlock.getCoordY());
+		BodyBlock tail = body.remove(body.size() - 1);
 		grow();
 	}
 
-	public boolean isValid() {
-		return this.valid;
+	public boolean isAlive() {
+		return this.alive;
 	}
 
-	public void setValid(boolean valid) {
-		this.valid = valid;
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 
 	public String toString() {
@@ -201,5 +183,10 @@ public class SnakeBody implements Controlable {
 
 	public Color getColor() {
 		return player.getSnakeColor();
+	}
+
+	public void takeaBite(BodyBlock whichHead) {
+		body.remove(whichHead);
+		setAlive(false);
 	}
 }

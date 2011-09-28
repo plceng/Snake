@@ -159,7 +159,7 @@ public class Player {
 	}
 
 	void killSnake() {
-		snake.setValid(false);
+		snake.setAlive(false);
 	}
 
 	/**

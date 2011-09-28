@@ -37,9 +37,9 @@ class MainFrame extends JFrame {
 	private void startNewGame() {
 		GameParameters.init(); // сбрасывает игроков, однако!
 		fieldModel = new GameFieldModel();
-		fieldModel.addPlayersAndSnakes(GameParameters.NUMBER_OF_PLAYERS);
-		fieldPanel.initHandlers();
+		fieldModel.addRandomPlayersAndSnakes(GameParameters.NUMBER_OF_PLAYERS);
 		fieldPanel.setFieldModel(fieldModel);
+		fieldPanel.initHandlers();
 
 	}
 	/*	private class NewGameActionListener implements ActionListener {

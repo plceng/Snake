@@ -38,7 +38,7 @@ public class Rabbit implements Controlable {
 		if (intTurnDirection == MovementDirection.DIR_LEFT.ordinal())
 			turnLeft();
 		else if (intTurnDirection == MovementDirection.DIR_RIGHT.ordinal())
-			turnRigth();
+			turnRight();
 		else if (intTurnDirection == MovementDirection.DIR_UP.ordinal())
 			turnUp();
 		else if (intTurnDirection == MovementDirection.DIR_DOWN.ordinal())
@@ -51,7 +51,7 @@ public class Rabbit implements Controlable {
 		moveVector.setDirection(MovementDirection.DIR_LEFT);
 	}
 
-	public void turnRigth() {
+	public void turnRight() {
 		moveVector.setDirection(MovementDirection.DIR_RIGHT);
 	}
 
