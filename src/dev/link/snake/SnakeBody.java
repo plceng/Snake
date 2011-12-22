@@ -65,7 +65,6 @@ public class SnakeBody implements Controlable {
 		hash = 97 * hash + (this.body != null ? this.body.hashCode() : 0);
 		hash = 97 * hash + (this.alive ? 1 : 0);
 		hash = 97 * hash + (this.player != null ? this.player.hashCode() : 0);
-		hash = 97 * hash + this.snakeID;
 		hash = 97 * hash + (this.moveVector != null ? this.moveVector.hashCode() : 0);
 		return hash;
 	}

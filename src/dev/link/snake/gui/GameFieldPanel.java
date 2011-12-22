@@ -1,6 +1,5 @@
 package dev.link.snake.gui;
 
-import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
@@ -123,7 +122,7 @@ public class GameFieldPanel extends JPanel {
 
 	private void drawRabbit(Graphics2D graph2D) {
 		Dimension fieldSize = fieldModel.getFieldSize();
-		graph2D.setColor(Color.YELLOW);
+		graph2D.setColor(Color.WHITE);
 		Rabbit rabbit = fieldModel.getRabbit();
 		BodyBlock bb = rabbit.getBody();
 		Shape drawBlock = new Ellipse2D.Double(bb.getCoordX() * drawBlockWidth,
