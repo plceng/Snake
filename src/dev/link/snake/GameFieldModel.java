@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Color;
 
 public class GameFieldModel {
-
+/**
+ * Необходим для идентификации фрагмента змеи. Содержит пары (фрагмент - змея)
+ * Используется, главным образом, для определения съеденной и/или съевшей змеи
+ */
 	private Map<BodyBlock, SnakeBody> gameField;
 //	private Collection<SnakeBody> snakes;
 	private Rabbit rabbit;
@@ -53,7 +56,7 @@ public class GameFieldModel {
 			newPlayer.setSnake(newSnake);
 			addToSnakesSet(newSnake);
 
-			// TODO А нужен ли этот массив
+			// TODO А нужен ли этот массив -- Нужен для ведения счёта как минимум
 			// Добавим игрока в глобальный массив для чего-нибудь
 			GameParameters.players.add(newPlayer);
 
@@ -113,7 +116,11 @@ public class GameFieldModel {
 	}
 
 	private void growSnake(SnakeBody snake) {
+		 // увеличить длину тела
 		snake.grow();
+		// добавление очков игроку
+		snake.getPlayer().incrScore();
+		// добавление нового фрагмента змеи (её головы) в gameField
 		BodyBlock snakeHead = snake.getHead();
 		gameField.put(snakeHead, snake);
 	}
@@ -124,7 +131,7 @@ public class GameFieldModel {
 
 	public void moveSnakes() {
 		for (SnakeBody snake : getAllSnakes()) {
-			if (!snake.isAlive()) { // Мертвых змей не проверяем
+			if (!snake.isAlive()) { // Мертвых змей за людей не считаем :)
 				continue;
 			}
 			// Ситуация 1: Съеден кролик
@@ -136,6 +143,7 @@ public class GameFieldModel {
 			else if (eatOtherSnake(snake)) {
 				growSnake(snake);
 			}
+			 // Ничего особенного: простое движение змеи
 			else if (snake.isAlive()) {
 				moveSnake(snake);
 			}

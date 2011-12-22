@@ -1,8 +1,5 @@
 package dev.link.snake;
 
-import java.util.*;
-import java.awt.Dimension;
-
 public class Rabbit implements Controlable {
 	private BodyBlock body;
 	private MovementVector moveVector;

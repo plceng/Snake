@@ -10,7 +10,7 @@ class MainFrame extends JFrame {
 
 	private static final int DEFAULT_WIDTH = 640;
 	private static final int DEFAULT_HEIGHT = 480;
-	private ActionListener newGameActionListener;
+	private ActionListener newGameAction;
 	private GameFieldPanel fieldPanel;
 	private GameFieldModel fieldModel;
 	private ControlPanel controlPanel;
@@ -19,14 +19,13 @@ class MainFrame extends JFrame {
 		setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		setTitle("Беся + Бодя = Балбесы :)");
 
-		newGameActionListener = new ActionListener() {
-
+		newGameAction = new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				startNewGame();
 			}
 		};
 
-		controlPanel = new ControlPanel(newGameActionListener);
+		controlPanel = new ControlPanel(newGameAction);
 		add(controlPanel, BorderLayout.EAST);
 
 		fieldPanel = new GameFieldPanel();

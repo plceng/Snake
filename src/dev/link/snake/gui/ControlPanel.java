@@ -12,25 +12,30 @@ import dev.link.snake.*;
 public class ControlPanel extends JPanel {
 	
 	private JButton newGameButton;
-	private JTextField fieldWidth = new JTextField("Field Width");
-	private JTextField fieldHeigth = new JTextField("Field Heigth");
+	private JTextField scoreFirstPlayer = new JTextField("Field Width");
+	private JTextField scoreSecondPlayer = new JTextField("Field Heigth");
 	
-	public ControlPanel(ActionListener newGameActionListener) {
+	public ControlPanel(ActionListener newGameAction) {
 		newGameButton = new JButton("New Game");
-		newGameButton.addActionListener(newGameActionListener);
-		setLayout(new GridLayout(3, 1));
-		add(fieldWidth);
-		add(fieldHeigth);
-		add(newGameButton);
+		newGameButton.addActionListener(newGameAction);
 		
+		setLayout(new GridLayout(3, 1));
+		add(scoreFirstPlayer);
+		add(scoreSecondPlayer);
+		add(newGameButton);
 	}
 	
-	public int getNewFieldWidth() {
-		return Integer.parseInt(fieldWidth.getText());
+	// Отображение текущего счёта на панели
+	private void viewScore(Player p) {
+		scoreFirstPlayer.setText( String.valueOf( p.getScore() ) );
 	}
-
-	public int getNewFieldHeight() {
-		return Integer.parseInt(fieldHeigth.getText());
-	}
+	
+//	public int getNewFieldWidth() {
+//		return Integer.parseInt(fieldWidth.getText());
+//	}
+//
+//	public int getNewFieldHeight() {
+//		return Integer.parseInt(fieldHeigth.getText());
+//	}
 	
 }

@@ -26,6 +26,7 @@ public class GameParameters {
 	{	{KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN } ,
 		{KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_W, KeyEvent.VK_S }	};
 	public static int NUMBER_OF_PLAYERS = 2;
+	public static int ScoreIncrement = 5;
 
 
 

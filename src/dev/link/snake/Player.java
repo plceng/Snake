@@ -2,8 +2,6 @@ package dev.link.snake;
 
 import java.awt.Color;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -63,15 +61,20 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+// Что касается очков игрока...
 	public int getScore() {
 		return score;
+	}
+
+	public void incrScore() {
+		score += GameParameters.ScoreIncrement;
 	}
 
 	public void setScore(int score) {
 		this.score = score;
 	}
-
+	
+//-----------------------------
 	public Color getSnakeColor() {
 		return snakeColor;
 	}
