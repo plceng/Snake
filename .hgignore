@@ -1,3 +1,4 @@
 syntax: glob
+build/
 src/dev/link/snake/*.java~
 src/dev/link/snake/gui/*.java~
