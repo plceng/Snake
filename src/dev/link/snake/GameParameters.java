@@ -20,7 +20,7 @@ public class GameParameters {
 	public static Color DEFAULT_FIRST_COLOR = Color.RED;
 	public static Color DEFAULT_SECOND_COLOR = Color.CYAN;
 
-	public static Set<Player> players = new HashSet<Player>();
+	public static List<Player> players = new ArrayList<Player>();
 
 	public static int[][] DEFAULT_KEY_SET =
 	{	{KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN } ,
@@ -31,7 +31,7 @@ public class GameParameters {
 
 
 	public static void init() {
-		players = new HashSet<Player>();
+		players = new ArrayList<Player>();
 //		players.add(new Player(FIRST_PLAYER_NAME, DEFAULT_FIRST_COLOR));
 //		players.add(new Player(SECOND_PLAYER_NAME, DEFAULT_SECOND_COLOR));
 	}

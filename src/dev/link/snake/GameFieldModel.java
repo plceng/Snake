@@ -56,7 +56,7 @@ public class GameFieldModel {
 			newPlayer.setSnake(newSnake);
 			addToSnakesSet(newSnake);
 
-			// TODO А нужен ли этот массив -- Нужен для ведения счёта как минимум
+			// TODO А нужен ли этот массив -- Нужен для ведения счёта как минимум (казалось бы...)
 			// Добавим игрока в глобальный массив для чего-нибудь
 			GameParameters.players.add(newPlayer);
 

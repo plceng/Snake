@@ -68,6 +68,13 @@ public class Player {
 
 	public void incrScore() {
 		score += GameParameters.ScoreIncrement;
+		firePlayerEvent(new PlayerEvent(this));
+	}
+
+
+	private void firePlayerEvent(PlayerEvent playerEvent) {
+		
+		
 	}
 
 	public void setScore(int score) {

@@ -12,30 +12,21 @@ import dev.link.snake.*;
 public class ControlPanel extends JPanel {
 	
 	private JButton newGameButton;
-	private JTextField scoreFirstPlayer = new JTextField("Field Width");
-	private JTextField scoreSecondPlayer = new JTextField("Field Heigth");
+	private ScorePanel scorePanel;
+
 	
 	public ControlPanel(ActionListener newGameAction) {
 		newGameButton = new JButton("New Game");
 		newGameButton.addActionListener(newGameAction);
-		
+		scorePanel = new ScorePanel();
+
 		setLayout(new GridLayout(3, 1));
-		add(scoreFirstPlayer);
-		add(scoreSecondPlayer);
 		add(newGameButton);
+		add(scorePanel);
+		
+		// Добавляем обработчик, реагирующий на изменение счёта
 	}
 	
 	// Отображение текущего счёта на панели
-	private void viewScore(Player p) {
-		scoreFirstPlayer.setText( String.valueOf( p.getScore() ) );
-	}
-	
-//	public int getNewFieldWidth() {
-//		return Integer.parseInt(fieldWidth.getText());
-//	}
-//
-//	public int getNewFieldHeight() {
-//		return Integer.parseInt(fieldHeigth.getText());
-//	}
-	
+
 }
