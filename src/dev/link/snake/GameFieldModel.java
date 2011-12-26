@@ -4,9 +4,9 @@ import java.util.*;
 import java.awt.Dimension;
 import java.awt.Color;
 
-public class GameFieldModel {
+public class GameFieldModel implements ScoreObservable {
 /**
- * Необходим для идентификации фрагмента змеи. Содержит пары (фрагмент - змея)
+ * Поле необходимо для идентификации фрагмента змеи. Содержит пары (фрагмент - змея)
  * Используется, главным образом, для определения съеденной и/или съевшей змеи
  */
 	private Map<BodyBlock, SnakeBody> gameField;
@@ -17,15 +17,14 @@ public class GameFieldModel {
 	private boolean rabbitIsAlive = true;
 	private Random rand = new Random();
 	private Set<SnakeBody> snakesSet;
+	private List<ScoreObserver> scoreObservers;
 //	public static Player[][] fieldCells;
 
 	public GameFieldModel() {
 		fieldSize = DEFAULT_FIELD_SIZE;
 		gameField = new HashMap<BodyBlock, SnakeBody>();
 		snakesSet = new HashSet<SnakeBody>();
-//		fieldCells = new Player[fieldSize.width][fieldSize.height];
-//		addRandomPlayersAndSnakes();
-//		onePlayerModel();
+		scoreObservers = new ArrayList<ScoreObserver>();
 		createRabbit();
 	}
 
@@ -78,36 +77,6 @@ public class GameFieldModel {
 	public Collection<SnakeBody> getAllSnakes() {
 		return snakesSet;
 	}
-//	private void addRandomSnakes() {
-//		for (Player p : GameParameters.players) {
-//			SnakeBody newSnake = new SnakeBody(rand.nextInt(fieldSize.width),
-//					rand.nextInt(fieldSize.height), p);
-//			addSnakeToFieldCell(newSnake);
-//			gameField.put(p, newSnake);
-//		}
-//	}
-//	private void bindSnakesForPlayers() {
-//		for (Player p : gameField.keySet()) {
-//			p.setSnake(gameField.get(p));
-//		}
-//	}
-//
-//	private void addSnakeToFieldCell(SnakeBody newSnake) {
-//		Player newPlayer = newSnake.getPlayer();
-//		for (BodyBlock b : newSnake.getBody()) {
-//			fieldCells[b.getCoordX()][b.getCoordY()] = newPlayer;
-//		}
-//
-//	}
-//
-//	static void addToFieldCell(BodyBlock newBlock, Player player) {
-//		fieldCells[newBlock.getCoordX()][newBlock.getCoordY()] = player;
-//	}
-//
-//	static void removeFromFieldCell(int x, int y) {
-//		fieldCells[x][y] = null;
-//	}
-	//for debug
 	private void createRabbit() {
 		int newRabbitXcoord = rand.nextInt(fieldSize.height);
 		int newRabbitYcoord = rand.nextInt(fieldSize.width);
@@ -120,6 +89,8 @@ public class GameFieldModel {
 		snake.grow();
 		// добавление очков игроку
 		snake.getPlayer().incrScore();
+		// оповещение обработчиков счёта
+		notifyScoreObservers();
 		// добавление нового фрагмента змеи (её головы) в gameField
 		BodyBlock snakeHead = snake.getHead();
 		gameField.put(snakeHead, snake);
@@ -274,17 +245,17 @@ public class GameFieldModel {
 	 * Sets the value of fieldSize in int values.
 	 */
 	public void setFieldSize(int width, int height) {
-		this.fieldSize.width = width;
-		this.fieldSize.height = height;
-		BodyBlock.COORD_LIMITS = this.fieldSize;
+		fieldSize.width = width;
+		fieldSize.height = height;
+		BodyBlock.COORD_LIMITS = fieldSize;
 	}
 
 	/**
 	 * Sets the value of fieldSize in Dimension value.
 	 */
-	public void setFieldSize(Dimension fieldSize) {
-		this.fieldSize = fieldSize;
-		BodyBlock.COORD_LIMITS = this.fieldSize;
+	public void setFieldSize(Dimension newfieldSize) {
+		fieldSize = newfieldSize;
+		BodyBlock.COORD_LIMITS = fieldSize;
 	}
 
 	public static void main(String[] args) {
@@ -293,5 +264,28 @@ public class GameFieldModel {
 		for (SnakeBody snake : snakes) {
 			System.out.println(snake);
 		}
+	}
+
+	@Override
+	public void addScoreObserver(ScoreObserver so) {
+		try {
+			scoreObservers.add(so);
+		} catch (NullPointerException ex) {
+			System.out.println("Ошибка назначения обработчика");
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+
+	@Override
+	public void removeScoreObserver(ScoreObserver so) {
+		scoreObservers.remove(so);
+		
+	}
+
+	@Override
+	public void notifyScoreObservers() {
+		for (ScoreObserver so : scoreObservers)
+			so.updateScore();
 	}
 }

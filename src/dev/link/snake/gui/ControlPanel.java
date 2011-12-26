@@ -20,11 +20,16 @@ public class ControlPanel extends JPanel {
 		newGameButton.addActionListener(newGameAction);
 		scorePanel = new ScorePanel();
 
-		setLayout(new GridLayout(3, 1));
+		setLayout(new GridLayout(4, 1));
 		add(newGameButton);
 		add(scorePanel);
 		
 		// Добавляем обработчик, реагирующий на изменение счёта
+	}
+
+
+	public ScoreObserver getScorePanel() {
+		return scorePanel;
 	}
 	
 	// Отображение текущего счёта на панели

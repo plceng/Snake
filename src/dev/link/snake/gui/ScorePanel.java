@@ -1,42 +1,35 @@
 package dev.link.snake.gui;
 
-import java.util.EventListener;
+import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dev.link.snake.GameParameters;
 import dev.link.snake.Player;
-import dev.link.snake.PlayerEvent;
-import dev.link.snake.PlayerListener;
+import dev.link.snake.ScoreObserver;
 
 /**
  * ѕанелька со счЄтом
  */
-public class ScorePanel extends JPanel {
-	private JLabel scoreFirstPlayer = new JLabel("Score of Player");
-	private JLabel scoreSecondPlayer = new JLabel("Field Heigth");
+public class ScorePanel extends JPanel implements ScoreObserver {
+	private JLabel scoreFirstPlayer = new JLabel("Score of Player 1: \n");
+	private JLabel scoreSecondPlayer = new JLabel("Score of Player 2: \n");
+
+	// private Map<Player, JLabel> scoreTable = null;
 
 	public ScorePanel() {
+		// scoreTable = new HashMap<Player, JLabel>();
+		setLayout(new GridLayout(2, 1));
 		add(scoreFirstPlayer);
 		add(scoreSecondPlayer);
-		addPlayerListener(new PlayerListener() {
-			@Override
-			public void playerStateChanged(PlayerEvent event) {
-				Player p = event.getPlayer();
-				switch (GameParameters.players.indexOf(p)) {
-				case 0 : scoreFirstPlayer.setText( String.valueOf( p.getScore() ) ); break;  
-				case 1 : scoreSecondPlayer.setText( String.valueOf( p.getScore() ) ); break;				}
-			}
-		});
 	}
 
-	public void addPlayerListener(PlayerListener listener) {
-		listenerList.add(PlayerListener.class, listener);
-	}
-
-	public void removePlayerListener(PlayerListener listener) {
-		listenerList.add(PlayerListener.class, listener);
+	public void updateScore() {
+		scoreFirstPlayer.setText("Score of Player 1: \n"
+				+ String.valueOf(GameParameters.players.get(0).getScore()));
+		scoreSecondPlayer.setText("Score of Player 2: \n"
+				+ String.valueOf(GameParameters.players.get(1).getScore()));
 	}
 
 }

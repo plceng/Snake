@@ -37,6 +37,11 @@ class MainFrame extends JFrame {
 		GameParameters.init(); // сбрасывает игроков, однако!
 		fieldModel = new GameFieldModel();
 		fieldModel.addRandomPlayersAndSnakes(GameParameters.NUMBER_OF_PLAYERS);
+		
+		ScoreObserver scorePanel = controlPanel.getScorePanel();
+		scorePanel.updateScore();
+		fieldModel.addScoreObserver(scorePanel);
+		
 		fieldPanel.setFieldModel(fieldModel);
 		fieldPanel.initHandlers();
 
