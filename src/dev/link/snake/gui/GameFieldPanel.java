@@ -28,7 +28,7 @@ public class GameFieldPanel extends JPanel {
 //		initHandlers();
 	}
 
-	public void initHandlers() {
+	public void initKeyHandlers() {
 		removeKeyListeners();
 		int keyListenerNum = 0;
 		//TODO «јменить GameParameters.players на fieldModel.getPlayers()
